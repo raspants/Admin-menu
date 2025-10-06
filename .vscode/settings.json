@@ -1,0 +1,9 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "c:\\Users\\Rasse\\dev\\c_kurs\\Kortsystem",
+            "binaryPath": "c:\\Users\\Rasse\\dev\\c_kurs\\Kortsystem\\main.exe",
+            "binaryArgs": []
+        }
+    ]
+}
