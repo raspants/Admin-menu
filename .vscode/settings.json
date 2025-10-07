@@ -4,6 +4,16 @@
             "cwd": "c:\\Users\\Rasse\\dev\\c_kurs\\Kortsystem",
             "binaryPath": "c:\\Users\\Rasse\\dev\\c_kurs\\Kortsystem\\main.exe",
             "binaryArgs": []
+        },
+        {
+            "cwd": "c:\\Users\\Rasse\\dev\\c_kurs\\Admin-menu",
+            "binaryPath": "c:\\Users\\Rasse\\dev\\c_kurs\\Admin-menu\\main.exe",
+            "binaryArgs": []
         }
-    ]
+    ],
+    "files.associations": {
+        "windows.h": "c",
+        "stdbool.h": "c",
+        "time.h": "c"
+    }
 }

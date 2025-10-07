@@ -1,5 +1,13 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
+
+void remoteOpen(){ 
+    printf("CURENTLY LAMP IS: Green\n");
+    int retTime = time(0) + 3;
+    while (time(0) < retTime)
+	    ;
+}
 
 int main(){
     while(true){
@@ -9,16 +17,24 @@ int main(){
         printf("3. Add/remove access\n");
         printf("4. Exit\n");
         printf("9. FAKE TEST SCAN CARD\n");
-        printf("Select option");
+        printf("Select option\n");
 
         int option;
         scanf(" %d", &option);
-        if(option == 4){
-            break;
-
-        }
+        switch(option){
+            case 1:
+                remoteOpen();
+                break;
+            case 2:
+                //code
+                break;
+            case 3:
+                //code
+                break;
+            case 4:
+                goto exit;
+        } 
     }
-
-
+    exit:
     return 0;
 }
