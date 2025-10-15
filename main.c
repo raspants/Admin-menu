@@ -16,8 +16,7 @@ typedef struct{
     Card users[10];
 
 
-void addRemoveAccess(Card *card, int *choise){
- 
+void addRemoveAccess(Card *card, int choise){
     if(choise == 1){
         //int cardUid; gör slumpmässiga tal sen
         //int date; ska autoskanna datum
@@ -27,6 +26,7 @@ void addRemoveAccess(Card *card, int *choise){
         scanf(" %d", &card ->status);
         printf("Enter todays date in this format: YYYY-MM-DD\n");
         scanf(" %d", &card ->date);
+    
     }else if(choise == 2){
         /*tuf kod som tar bor användare
         1.vilken användare vill du ta bort? baserat på kortnummer
@@ -36,15 +36,18 @@ void addRemoveAccess(Card *card, int *choise){
     }
 }
 
-void cardsInSystem(Card *user){
+void cardsInSystem(Card *user, int numberOfCards){
     printf("All cards in system\n");
-    char curentStatus[25];
+    for(int i = 0; i < numberOfCards; i++){
+        char curentStatus[25];
         if(user ->status == 0){
             strcpy(curentStatus, "No Acces Added to system");
         }else{
             strcpy(curentStatus, "Acces Added to system");
-        } 
-        printf("Uid: %d   %s:    %d", users ->cardUid, curentStatus, users ->date);
+        }
+        printf("Uid:%d  %s:  %d\n", users ->cardUid, curentStatus, users ->date);
+    } 
+        
 }
 
 int main(){
@@ -59,21 +62,33 @@ int main(){
                 break;
             case 2:
                 if(numberOfCards > 0){
-                    for(int i = 0; i < numberOfCards; i++){
-                    cardsInSystem(&users[i]);
-                    }
+                    cardsInSystem(users, numberOfCards);
                 }else{
                     printf("There are curently no users in the system\n");
                     break;
                 }
+                break;
             case 3:
-               int choise;
+                int choise;
                 printf("Do you want to add or remove a user? 1.Add, 2.Remove\n");
                 scanf(" %d", &choise);
-                if(choise == 1 || choise == 2){
-                    addRemoveAccess(&users[numberOfCards], &choise);
+                start:
+                if(choise == 1){
+                    addRemoveAccess(&users[numberOfCards], choise);
+                    numberOfCards++;
+                    printf("Do you want to add another user? 1.Yes, 2.No\n");
+                    scanf(" %d", &choise);
+                    if(choise == 1){
+                        goto start;
+                    }else{
+                        break;
+                    }
+                    //break;
+                }else if(choise == 2){
+                    addRemoveAccess(users, choise);
+                    numberOfCards--;
                 }else{
-                    printf("Error: %d is not a valid choise");
+                    printf("Error: %d is not a valid choise", choise);
                 }
                 break;
             case 4:
@@ -82,7 +97,7 @@ int main(){
             //code
             break;
             default:
-            printf(" %d is invalid input\n", option);
+            printf("Error: %d is invalid input\n", option);
             continue;
 
         } 
