@@ -4,54 +4,76 @@
 #include <time.h>
 #include <string.h>
 #include "menu.h"
+#include "printcards.h"
 
 void remoteOpen();
 void cardsInSystem();
  
-typedef struct{
+
+/*typedef struct{
     int cardUid; 
     int status;
     int date;
-    } Card;
+    } Card;*/
     Card users[10];
 
 
-void addRemoveAccess(Card *card, int choise){
-    if(choise == 1){
-        //int cardUid; gör slumpmässiga tal sen
-        //int date; ska autoskanna datum
-        printf("Enter new card number, five didgits\n");
-        scanf(" %d", &card ->cardUid);
+void addRemoveAccess(Card *users, int choise, int *amountOfCards){
+    //int cardUid; gör slumpmässiga tal sen
+    switch (choise)
+    {
+    case 1: //For adding new users
+        printf("Enter new users number, five didgits\n");
+        scanf(" %d", &users ->cardUid);
         printf("Enter acces status, 0.No acces, 1.Acces\n");
-        scanf(" %d", &card ->status);
-        printf("Enter todays date in this format: YYYY-MM-DD\n");
-        scanf(" %d", &card ->date);
-    
-    }else if(choise == 2){
-        /*tuf kod som tar bor användare
-        1.vilken användare vill du ta bort? baserat på kortnummer
-        2. meddela info och fråga igen för att bekräfta.
-        3.stäm av om användare finns.
-        */
-    }
-}
+        scanf(" %d", &users ->status);
+        printf("Enter todays date in this format: YYYYMMDD\n");//ska autoskanna datum
+        scanf(" %d", &users ->date);
+        *amountOfCards = *amountOfCards + 1;
+        break;
+    case 2:
+        int cardnum; //for altering acces/removing profile
+        printf("These are the curent cards in the system:\n");
+        cardsInSystem(users, amountOfCards);
+        printf("Enter the Uid of the users you want to Acces:\n");
+        scanf(" %d", &cardnum);
 
-void cardsInSystem(Card *user, int numberOfCards){
-    printf("All cards in system\n");
-    for(int i = 0; i < numberOfCards; i++){
-        char curentStatus[25];
-        if(user ->status == 0){
-            strcpy(curentStatus, "No Acces Added to system");
-        }else{
-            strcpy(curentStatus, "Acces Added to system");
+        for(Card *card = users; card < users + *amountOfCards; card++){
+            if(card ->cardUid == cardnum){
+                printf(" Card: %d  was found, Do you want to 1.Adjust acces or 2.Remove a profile?\n", cardnum);
+                scanf(" %d", &choise);
+                if (choise == 1){
+                    printf("shold the users have acces or not? 1.Yes, 2.No\n");
+                    scanf(" %d", &choise);
+                    if(choise == 1){
+                        card ->status = 1;
+                        printf("Acces has been updated and added on the users\n");
+                    }else if(choise == 2){
+                        card ->status = 0;
+                        printf("Acces has been updated uppdated and removed on the users\n");
+                    }
+                }else if(choise == 2){            
+                    printf("Are you want to sure you want to REMOVE the users profile? 1.Yes, 2.No\n");
+                    scanf(" %d", &choise);
+                    if(choise == 1){
+                        card ->status = 1;
+                        *amountOfCards = *amountOfCards -1;
+                        printf("Acces has been updated\n");
+                    }else{
+                        printf("Unexpected error, somthing went wrong\n");
+                    }
+                }    
+            } 
         }
-        printf("Uid:%d  %s:  %d\n", users ->cardUid, curentStatus, users ->date);
-    } 
-        
+        printf("No users with Uid nr: %d was found.",users ->cardUid);
+            break;
+    default:
+        break;
+    }   
 }
 
 int main(){
-    int numberOfCards = 0;//Lagras i .txt och läses in när man öppnar programet
+    int amountOfCards = 0;//Lagras i .txt och läses in när man öppnar programet
     while(true){
         printMenue();
         int option;
@@ -61,8 +83,8 @@ int main(){
                 remoteOpen();
                 break;
             case 2:
-                if(numberOfCards > 0){
-                    cardsInSystem(users, numberOfCards);
+                if(amountOfCards > 0){
+                    cardsInSystem(users, &amountOfCards);
                 }else{
                     printf("There are curently no users in the system\n");
                     break;
@@ -70,12 +92,13 @@ int main(){
                 break;
             case 3:
                 int choise;
-                printf("Do you want to add or remove a user? 1.Add, 2.Remove\n");
+                printf("Do you want to 1.Add or 2.Adjust/Remove profile?\n");
                 scanf(" %d", &choise);
                 start:
                 if(choise == 1){
-                    addRemoveAccess(&users[numberOfCards], choise);
-                    numberOfCards++;
+                    addRemoveAccess(&users[amountOfCards], choise, &amountOfCards);
+                    //amountOfCards++;
+                    printf(" %d", amountOfCards);
                     printf("Do you want to add another user? 1.Yes, 2.No\n");
                     scanf(" %d", &choise);
                     if(choise == 1){
@@ -83,10 +106,10 @@ int main(){
                     }else{
                         break;
                     }
-                    //break;
                 }else if(choise == 2){
-                    addRemoveAccess(users, choise);
-                    numberOfCards--;
+                    printf("Hello");
+                    addRemoveAccess(users, choise, &amountOfCards);
+                    //amountOfCards--;
                 }else{
                     printf("Error: %d is not a valid choise", choise);
                 }
@@ -94,11 +117,10 @@ int main(){
             case 4:
                 goto exit;
             case 9:
-            //code
-            break;
+                break;
             default:
-            printf("Error: %d is invalid input\n", option);
-            continue;
+                printf("Error: %d is invalid input\n", option);
+                continue;
 
         } 
     }
@@ -112,3 +134,4 @@ void remoteOpen(){
     while (time(0) < retTime)
 	    ;
 }
+
