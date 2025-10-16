@@ -5,17 +5,12 @@
 #include <string.h>
 #include "menu.h"
 #include "printcards.h"
+#include "remoteopen.h"
 
 void remoteOpen();
 void cardsInSystem();
  
-
-/*typedef struct{
-    int cardUid; 
-    int status;
-    int date;
-    } Card;*/
-    Card users[10];
+Card users[10];
 
 
 void addRemoveAccess(Card *users, int choise, int *amountOfCards){
@@ -71,9 +66,27 @@ void addRemoveAccess(Card *users, int choise, int *amountOfCards){
         break;
     }   
 }
+void fileRead(FILE *fp, int *amountOfCards){
+    
+    //Lagras i .txt och läses in när man öppnar programet
+   
+    if(fp == NULL){
+        printf("Error: Failed to read file\n");
+    }else{
+        printf("File reed succesfully\n");
+        fscanf(fp, " %d", amountOfCards);
+    }
+    
+}
 
 int main(){
-    int amountOfCards = 0;//Lagras i .txt och läses in när man öppnar programet
+    int amountOfCards;
+    FILE *fp;
+    fp = fopen("data.txt", "r");
+    fileRead(fp, &amountOfCards);
+    fclose(fp);
+    printf(" %d!!!\n", amountOfCards);///Ta bort sen
+    
     while(true){
         printMenue();
         int option;
@@ -115,7 +128,8 @@ int main(){
                 }
                 break;
             case 4:
-                goto exit;
+                //spara data innan stännga?
+                return 0;
             case 9:
                 break;
             default:
@@ -124,14 +138,9 @@ int main(){
 
         } 
     }
-    exit:
+  
     return 0;
 }
 
-void remoteOpen(){ 
-    printf("CURENTLY LAMP IS: Green\n");
-    int retTime = time(0) + 3;
-    while (time(0) < retTime)
-	    ;
-}
+
 
