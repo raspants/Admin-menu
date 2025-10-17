@@ -18,6 +18,8 @@
         "menu.h": "c",
         "string.h": "c",
         "stdio.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "remoteopen.h": "c",
+        "fileconfig.h": "c"
     }
 }

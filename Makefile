@@ -1,5 +1,5 @@
 PROG = main.exe 
-SRC = main.c menu.c printcards.c remoteopen.c
+SRC = main.c menu.c printcards.c remoteopen.c fileConfig.c
 CFLAGS=-Wall -Werror -g
 LIBS = 
 all: $(PROG)
