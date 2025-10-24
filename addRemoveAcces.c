@@ -1,7 +1,7 @@
 #include <time.h>
 #include <stdio.h>
 #include "addRemoveAcces.h"
-
+#include "safeinput.h"
 
 int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, long *numValueOfInput, INPUT_RESULT *inputResult){
     
@@ -13,7 +13,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         
         int newCard = 110001;
 
-        if(*amountOfCards == 0){ //kan evntuellt bli problem om man har precis "fel" kortnummer i txt filen i förhållande till mängden användare
+        if(*amountOfCards == 0){ 
             cardList ->allCards[*amountOfCards].cardUid = newCard;
         }else{    
             do{
@@ -27,35 +27,30 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
                 }
             }while(cardList ->allCards[*amountOfCards].cardUid != newCard);
         }
-        while(true){
-            inputResult = ValidateResult("Enter acces status, 0.No acces, 1.Acces | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput);
-            if(inputResult == INPUT_EXIT){
-            return INPUT_EXIT;
-            }
-            
-            acces = (int)*numValueOfInput;//parse from long to int, wold be extream edge case to get overflow 
-            if(acces == 1 || acces == 0){
-                cardList ->allCards[*amountOfCards].status = acces;
-                break;
-            }else{
-                printf("Invalid input\n");   
-                continue;
-            }
-        }
-        
+
         time_t timeFetch = time(NULL);
         struct tm tm = *localtime(&timeFetch);
         
-        int timeAndDate = (tm.tm_year + 1990) * 10000 + (tm.tm_mon +1) * 100 + (tm.tm_mday);
+        int timeAndDate = (tm.tm_year + 1900) * 10000 + (tm.tm_mon +1) * 100 + (tm.tm_mday);
+
         cardList ->allCards[*amountOfCards].date = timeAndDate;
 
+
+        *inputResult = ValidateResult("Enter acces status, 0.No acces, 1.Acces | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 0, 1);
+        if(*inputResult == INPUT_EXIT){
+            return INPUT_EXIT;
+        }
+
+        acces = (int)*numValueOfInput;//parse from long to int, wold be extream edge case to get overflow 
+        cardList ->allCards[*amountOfCards].status = acces;
+        
         *amountOfCards = *amountOfCards + 1;
-        printf(" %s, %d, %d, %d, %d",filename, cardList ->allCards[*amountOfCards].cardUid,cardList ->allCards[*amountOfCards].status,cardList ->allCards[*amountOfCards].date, amountOfCards);
+       
         reWrihtToFile(filename, cardList, amountOfCards);
         return 0;
-    }
-}    //for altering acces/removing profile    
-/*    case 2:
+        
+    //for altering acces/removing profile    
+    case 2:
 
         int cardnum;
         int index;
@@ -66,11 +61,12 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         cardsInSystem(cardList);
 
         while(true){
-            inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput);
-            if(inputResult == INPUT_EXIT){
+
+            *inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 110001, 999999);
+            if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }
-
+         
             cardnum = (int)*numValueOfInput;
             for(int i = 0; i < *amountOfCards; i++){
                 if(cardList ->allCards[i].cardUid == cardnum){
@@ -83,82 +79,68 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             if(!foundcard){
                 printf("No card with Uid: %d was found, reenter a valid Uid\n",cardnum);
                 continue;
-            }               
+            }
+            break;               
         } 
 
-        while(true){
-            inputResult = ValidateResult("1.Adjust acces, 2.Remove a profile  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput);
-            if(INPUT_EXIT){
-                return INPUT_EXIT;
-            }
-            break;
+        *inputResult = ValidateResult("1.Adjust acces, 2.Remove a profile  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 1, 2);
+        if(*inputResult == INPUT_EXIT){
+            return INPUT_EXIT;
         }
-    
+ 
         action = (int)*numValueOfInput;
         if(action == 1){
-            while(true){
-                if(GetInput("Shold the card have acces or not? 0.No, 1.Yes\n", inputBuffer,sizeof(inputBuffer), numValueOfInput) != INPUT_RESULT_OK){
-                    if(INPUT_EXIT){
-                        return INPUT_EXIT;
-                    }else{
-                        continue;
-                    }
-                }  
-                acces = (int)*numValueOfInput;
-                if(acces == 1){
-                    cardList ->allCards[index].status = 1;
-                    reWrihtToFile(filename, cardList, amountOfCards);
-                    printf("Acces has been updated and added on the card\n");
-                    return 0;
-                }else if(acces == 0){
-                    cardList ->allCards[index].status = 0;
-                    reWrihtToFile(filename, cardList, amountOfCards);
-                    printf("Acces has been updated uppdated and removed on the card\n");
-                    return 0;
-                }else{
-                    printf("Invalid input\n");
-                }
+           
+            *inputResult = ValidateResult("Shold the card have acces or not? 0.No, 1.Yes\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 0, 1);
+            if(*inputResult == INPUT_EXIT){
+                return INPUT_EXIT;
             }  
+            acces = (int)*numValueOfInput;
+            if(acces == 1){
+                cardList ->allCards[index].status = 1;
+                reWrihtToFile(filename, cardList, amountOfCards);
+                printf("Acces has been updated and added on the card\n");
+                return 0;
+            }else if(acces == 0){
+                cardList ->allCards[index].status = 0;
+                reWrihtToFile(filename, cardList, amountOfCards);
+                printf("Acces has been updated uppdated and removed on the card\n");
+                return 0;
+            }else{
+                printf("Invalid input\n");
+            }
+            
            
         }else if(action == 2){            
-            printf("Are you sure you want to REMOVE the allcards profile? 1.Yes, 2.No\n");
+           
  
-            while(true){
-                if(GetInput("Are you sure you want to REMOVE the allcards profile? 1.Yes, 2.No\n", inputBuffer,sizeof(inputBuffer), numValueOfInput) != INPUT_RESULT_OK){
-                    if(INPUT_EXIT){
-                        return INPUT_EXIT;
-                    }else{
-                        continue;
-                    }
-                } 
+            *inputResult = ValidateResult("Are you sure you want to REMOVE the cards profile? 1.Yes, 2.No\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 1, 2);
+            if(*inputResult == INPUT_EXIT){
+                return INPUT_EXIT;
+            }
 
-                int removalVerification;
-                removalVerification = (int)*numValueOfInput;
+            action = (int)*numValueOfInput;
+            
+            if(action == 1){
+                for(int i = index; i < *amountOfCards -1; i++){
+                    cardList ->allCards[i] = cardList ->allCards[i +1];
+                }
+                *amountOfCards = *amountOfCards - 1;
 
-                if(removalVerification == 1){
-                    for(int i = index; i < *amountOfCards -1; i++){
-                        cardList ->allCards[i] = cardList ->allCards[i +1];
-                    }
-                    *amountOfCards = *amountOfCards - 1;
-                    if(*amountOfCards > 0){
-                        cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards)));
-                        reWrihtToFile(filename, cardList, amountOfCards);
-                        return 0;
-                    }else{
-                        free(cardList ->allCards);
-                        cardList -> allCards = NULL;
-                        reWrihtToFile(filename, cardList, amountOfCards);
-                        return 0;
-                    }
+                if(*amountOfCards > 0){
+                    cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards)));
+                    reWrihtToFile(filename, cardList, amountOfCards);
+                    return 0;
                 }else{
-                    printf("Profile with Uid: %d will not be removed\n", cardnum);
+                    free(cardList ->allCards);
+                    cardList -> allCards = NULL;
+                    reWrihtToFile(filename, cardList, amountOfCards);
                     return 0;
                 }
-            }                         
-        }else{
-            printf("Invalid input\n"); 
-        }
+            }   
+            return 0;
+        }    
     default:
        return 0;
     }   
-}*/
+}

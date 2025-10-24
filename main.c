@@ -46,66 +46,52 @@ int main(){
 
         case 3:
 
-            do{    
+            //do{    
                 inputResult = ValidateResult("\nDo you want to 1.Add, 2.Adjust/Remove profile? | Press X to go back\n",  inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 2);
                 if(inputResult == INPUT_EXIT){
                     break;
                 }
-               
-
-                subOption  = (int)numValueOfInput;
+                option = (int)numValueOfInput;
                 
-            }while(subOption != 1 && subOption != 2);    
+            //}while(option != 1 && subOption != 2);    
 
-            if(subOption == 1){ 
+            if(option == 1){ 
                 do {
-                    addRemoveAccess(filename,&cardList, &subOption, &cardList.amountOfCards, inputBuffer, &numValueOfInput, &inputResult);
+                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, &numValueOfInput, &inputResult);
+                    
                     inputResult = ValidateResult("Do you want to add another user? 1.Yes, X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
-
-                    
-
-
                     subOption = (int)numValueOfInput;    
-                    if(subOption != 1){
-                        printf("Nonvalid option\n");
-                        continue;
-                    }    
-                    
+                     
                 }while(subOption == 1); 
                 break;
-            }else if(subOption == 2){ //adjust or remove vard profile
+            }else if(option == 2){ //adjust or remove vard profile
                 do{
                     if(cardList.amountOfCards == 0){
                         printf("No cards curently in system\n");
                         break;
                     }
 
-                    inputResult = addRemoveAccess(filename,&cardList, &subOption, &cardList.amountOfCards, inputBuffer, &numValueOfInput, &inputResult);
-                    if(inputResult == INPUT_EXIT){
-                        break;
-                    }
-                
+                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, &numValueOfInput, &inputResult);
+                    
                     inputResult = ValidateResult("Do you want to acces another card profile? 1.Yes, X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
                     subOption = (int)numValueOfInput;   
-                    if(subOption != 1){
-                        printf("Nonvalid option\n");
-                        continue;
-                    }    
+                    
                 }while(subOption == 1);
-            }
+                break;
+            }   
             
         case 4:
             //spara data innan stännga?
             free(cardList.allCards);
             return 0;
         case 9:
-            cardScan(&cardList);
+            cardScan(&cardList, inputBuffer,sizeof(inputBuffer), &numValueOfInput, &inputResult);
             break; 
         default:
             printf("Invalid option\n");

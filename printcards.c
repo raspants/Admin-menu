@@ -9,7 +9,7 @@ void cardsInSystem(CARDLIST *cardList){
         if(card ->status == 0){
             strcpy(curentStatus, "No Acces Added to system");
         }else{
-            strcpy(curentStatus, "Acces Added to system");
+            strcpy(curentStatus, "   Acces Added to system");
         }
         
         printf("Uid:%d  %s:  %d\n", card ->cardUid, curentStatus, card ->date);

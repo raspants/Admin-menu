@@ -5,6 +5,7 @@
 #include "safeinput.h"
 
 
+
 bool parseLong(const char *str, long *val)
 {
     char *temp;
@@ -47,6 +48,7 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 	if (fgets(buff, maxSize, stdin) == NULL || (strlen(buff) == 1 && buff[0] == '\n')) // treat as empty
 	{
 		printf("ERROR_MESSAGE: NO_INPUT_DETECTED\n");
+		
 		return INPUT_RESULT_NO_INPUT; 
 	}
 
@@ -100,6 +102,4 @@ INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValu
 		continue;
 	}
 }
-
-
 

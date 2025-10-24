@@ -26,6 +26,8 @@
         "filehandeling.h": "c",
         "cardstructure.h": "c",
         "format": "c",
-        "adminprofile.h": "c"
+        "adminprofile.h": "c",
+        "limits.h": "c",
+        "safeinput.h": "c"
     }
 }

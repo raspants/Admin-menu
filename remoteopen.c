@@ -10,10 +10,13 @@ void remoteOpen(Card *profile){
     while (time(0) < retTime)
 	    ;
     }
-    else{
+    else if(profile ->status == 0){
         printf("CURENTLY LAMP IS: RED\n");
         int retTime = time(0) + 3; //testas sleep() och Sleep()
         while (time(0) < retTime)
             ;
+    }else{
+        printf("Card not found in system\n");
     }
+    return;
 }

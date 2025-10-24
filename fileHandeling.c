@@ -44,7 +44,11 @@ void reWrihtToFile(const char *filename, CARDLIST *cardList, int *amountOfCards)
     fprintf(fp, "%d\n", cardList ->amountOfCards);
     
     for(int i = 0; i < *amountOfCards; i++){
-        fprintf(fp, "%d %d %d\n", cardList ->allCards[i].cardUid, cardList ->allCards[i].status, cardList ->allCards[i].date);
+        if(fprintf(fp, "%d %d %d\n", cardList ->allCards[i].cardUid, cardList ->allCards[i].status, cardList ->allCards[i].date) <0){
+            
+            perror("ERROR: Filed to wriht data for card\n");
+            fclose(fp);
+        }
     }         
     
     fclose(fp);
