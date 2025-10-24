@@ -36,7 +36,7 @@ bool parseFloat(const char *str, float *val)
 
 
 
-INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInput)
+INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInput, const int rangeValueMin, const int rangeValueMax)
 {
 
 	if (prompt != NULL && strlen(prompt) > 0)
@@ -44,11 +44,14 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 		printf("%s", prompt);
 	}
 
-	if (fgets(buff, maxSize, stdin) == NULL || (strlen(buff) == 1 && buff[0] == '\n'))
+	if (fgets(buff, maxSize, stdin) == NULL || (strlen(buff) == 1 && buff[0] == '\n')) // treat as empty
 	{
 		printf("ERROR_MESSAGE: NO_INPUT_DETECTED\n");
 		return INPUT_RESULT_NO_INPUT; 
 	}
+
+	// If it was too long, there'll be no newline. In that case, we flush
+	// to end of line so that excess doesn't affect the next call.
 
 	if (buff[strlen(buff) - 1] != '\n') {
 		int extra = 0;
@@ -74,18 +77,20 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 		return INPUT_RESULT_INVALID;
 	}
     
-	// If it was too long, there'll be no newline. In that case, we flush
-	// to end of line so that excess doesn't affect the next call.
 	
+	if((int)*numValueOfInput > rangeValueMax || (int)*numValueOfInput < rangeValueMin){
+		printf("ERROR_MESSAGE: INPUT_OUT_OF_RANGE\n");
+		return INPUT_RESULT_INVALID;
+	}
 
 	// Otherwise remove newline and give string back to caller.
 
 	return INPUT_RESULT_OK;
 }
-INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValueOfInput){
+INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValueOfInput,  const int rangeValueMin, const int rangeValueMax){
 	INPUT_RESULT result;
 	while(true){
-		result = GetInput(prompt, buff, maxSize, numValueOfInput);
+		result = GetInput(prompt, buff, maxSize, numValueOfInput, rangeValueMin, rangeValueMax);
 		if(result == INPUT_EXIT){
 			return INPUT_EXIT;
 		}
@@ -95,3 +100,6 @@ INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValu
 		continue;
 	}
 }
+
+
+

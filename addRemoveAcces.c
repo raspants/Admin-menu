@@ -3,7 +3,7 @@
 #include "addRemoveAcces.h"
 
 
-int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, long *numValueOfInput){
+int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, long *numValueOfInput, INPUT_RESULT *inputResult){
     
     int acces;
 
@@ -16,7 +16,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         if(*amountOfCards == 0){ //kan evntuellt bli problem om man har precis "fel" kortnummer i txt filen i förhållande till mängden användare
             cardList ->allCards[*amountOfCards].cardUid = newCard;
         }else{    
-            while(true){
+            do{
                 for(int i = 0; i < *amountOfCards; i++){
                     if(cardList ->allCards[i].cardUid == newCard){
                         newCard++;
@@ -25,18 +25,14 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
                         break;
                     }
                 }
-                break;
-            }
+            }while(cardList ->allCards[*amountOfCards].cardUid != newCard);
         }
         while(true){
-            if(GetInput("Enter acces status, 0.No acces, 1.Acces | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput) != INPUT_RESULT_OK){
-                if(INPUT_EXIT){
-                    return INPUT_EXIT;
-                }else{
-                    continue;
-                }
-            } 
-
+            inputResult = ValidateResult("Enter acces status, 0.No acces, 1.Acces | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput);
+            if(inputResult == INPUT_EXIT){
+            return INPUT_EXIT;
+            }
+            
             acces = (int)*numValueOfInput;//parse from long to int, wold be extream edge case to get overflow 
             if(acces == 1 || acces == 0){
                 cardList ->allCards[*amountOfCards].status = acces;
@@ -53,16 +49,13 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         int timeAndDate = (tm.tm_year + 1990) * 10000 + (tm.tm_mon +1) * 100 + (tm.tm_mday);
         cardList ->allCards[*amountOfCards].date = timeAndDate;
 
-        //printf("Enter todays date in this format: YYYYMMDD\n");//ska autoskanna datum
-        //scanf(" %d", &cardList ->allCards[*amountOfCards].date);///
-
         *amountOfCards = *amountOfCards + 1;
-
+        printf(" %s, %d, %d, %d, %d",filename, cardList ->allCards[*amountOfCards].cardUid,cardList ->allCards[*amountOfCards].status,cardList ->allCards[*amountOfCards].date, amountOfCards);
         reWrihtToFile(filename, cardList, amountOfCards);
         return 0;
-
-    //for altering acces/removing profile    
-    case 2:
+    }
+}    //for altering acces/removing profile    
+/*    case 2:
 
         int cardnum;
         int index;
@@ -73,13 +66,10 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         cardsInSystem(cardList);
 
         while(true){
-            if(GetInput("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput) != INPUT_RESULT_OK){
-                if(INPUT_EXIT){
-                    return INPUT_EXIT;
-                }else{
-                    continue;
-                }
-            } 
+            inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput);
+            if(inputResult == INPUT_EXIT){
+                return INPUT_EXIT;
+            }
 
             cardnum = (int)*numValueOfInput;
             for(int i = 0; i < *amountOfCards; i++){
@@ -97,13 +87,10 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         } 
 
         while(true){
-            if(GetInput("1.Adjust acces, 2.Remove a profile  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput) != INPUT_RESULT_OK){
-                if(INPUT_EXIT){
-                    return INPUT_EXIT;
-                }else{
-                    continue;
-                }
-            } 
+            inputResult = ValidateResult("1.Adjust acces, 2.Remove a profile  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput);
+            if(INPUT_EXIT){
+                return INPUT_EXIT;
+            }
             break;
         }
     
@@ -174,4 +161,4 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
     default:
        return 0;
     }   
-}
+}*/

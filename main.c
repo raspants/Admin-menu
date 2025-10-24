@@ -13,7 +13,6 @@
 #include "cardScan.h"
 #include "safeinput.h"
 
-
 int main(){
     CARDLIST cardList;
     cardList.allCards = NULL;
@@ -30,7 +29,7 @@ int main(){
         int option;
         int subOption;
 
-        inputResult = ValidateResult("Select menu option\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput);
+        inputResult = ValidateResult("Select menu option\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 9);
     
         option = (int)numValueOfInput;
         switch(option){
@@ -46,30 +45,36 @@ int main(){
             break;
 
         case 3:
-            bool returnToMenu = false; 
-            
-            inputResult = ValidateResult("\nDo you want to 1.Add, 2.Adjust/Remove profile? | Press X to go back\n",  inputBuffer,sizeof(inputBuffer), &numValueOfInput);
-            printf(" %d", inputResult);
-            if(inputResult == INPUT_EXIT){
-                returnToMenu = true;
-                break;
-            }
-                    
-            subOption  = (int)numValueOfInput;
+
+            do{    
+                inputResult = ValidateResult("\nDo you want to 1.Add, 2.Adjust/Remove profile? | Press X to go back\n",  inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 2);
+                if(inputResult == INPUT_EXIT){
+                    break;
+                }
+               
+
+                subOption  = (int)numValueOfInput;
+                
+            }while(subOption != 1 && subOption != 2);    
 
             if(subOption == 1){ 
                 do {
-                    addRemoveAccess(filename,&cardList, &subOption, &cardList.amountOfCards, inputBuffer, &numValueOfInput);
-                    
-                    inputResult = ValidateResult("Do you want to add another user? 1.Yes, 2/X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput);
+                    addRemoveAccess(filename,&cardList, &subOption, &cardList.amountOfCards, inputBuffer, &numValueOfInput, &inputResult);
+                    inputResult = ValidateResult("Do you want to add another user? 1.Yes, X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
-                        returnToMenu = true;
                         break;
                     }
-                    subOption = (int)numValueOfInput;        
-                    break;
+
                     
-                }while(subOption == 1 && !returnToMenu); 
+
+
+                    subOption = (int)numValueOfInput;    
+                    if(subOption != 1){
+                        printf("Nonvalid option\n");
+                        continue;
+                    }    
+                    
+                }while(subOption == 1); 
                 break;
             }else if(subOption == 2){ //adjust or remove vard profile
                 do{
@@ -78,21 +83,21 @@ int main(){
                         break;
                     }
 
-                    inputResult = addRemoveAccess(filename,&cardList, &subOption, &cardList.amountOfCards, inputBuffer, &numValueOfInput);
+                    inputResult = addRemoveAccess(filename,&cardList, &subOption, &cardList.amountOfCards, inputBuffer, &numValueOfInput, &inputResult);
                     if(inputResult == INPUT_EXIT){
-                        returnToMenu = true;
                         break;
                     }
                 
-                    inputResult = ValidateResult("Do you want to acces another card profile? 1.Yes, 2/X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput);
+                    inputResult = ValidateResult("Do you want to acces another card profile? 1.Yes, X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
-                        returnToMenu = true;
                         break;
                     }
-
-                    subOption = (int)numValueOfInput;        
-                    break;  
-                }while(subOption == 1 && !returnToMenu);
+                    subOption = (int)numValueOfInput;   
+                    if(subOption != 1){
+                        printf("Nonvalid option\n");
+                        continue;
+                    }    
+                }while(subOption == 1);
             }
             
         case 4:
@@ -103,7 +108,7 @@ int main(){
             cardScan(&cardList);
             break; 
         default:
-            printf("Error is invalid input\n");
+            printf("Invalid option\n");
             continue;
         }
     }

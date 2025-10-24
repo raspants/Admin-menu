@@ -13,8 +13,8 @@ typedef enum {
 } INPUT_RESULT;
 
 
-INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long *numValueOfInput);
+INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long *numValueOfInput, const int rangeValueMin, const int rangeValueMax);
 
-INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValueOfInput); 
+INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValueOfInput, const int rangeValueMin, const int rangeValueMax); 
 
 #endif
