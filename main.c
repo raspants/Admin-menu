@@ -6,169 +6,117 @@
 #include "menu.h"
 #include "printcards.h"
 #include "remoteopen.h"
-#include "fileConfig.h"
+#include "fileHandeling.h"
+#include "addRemoveAcces.h"
+#include "cardStructure.h"
+#include "adminprofile.h"
+#include "cardScan.h"
+#include "safeinput.h"
 
-//void remoteOpen();
-//void cardsInSystem();
- 
-
-
-
-void addRemoveAccess(/*FILE *fp,*/ Card *users, int choise, int *amountOfCards){
-    //int cardUid; gör slumpmässiga tal sen
-    switch (choise)
-    {
-    case 1: //For adding new users
-        printf("Enter new users number, five didgits\n");
-        scanf(" %d", &users ->cardUid);
-        printf("Enter acces status, 0.No acces, 1.Acces\n");
-        scanf(" %d", &users ->status);
-        printf("Enter todays date in this format: YYYYMMDD\n");//ska autoskanna datum
-        scanf(" %d", &users ->date);
-        *amountOfCards = *amountOfCards + 1;
-        /*fp = fopen("data.txt", "w");
-        fileWright(fp, amountOfCards);
-        fclose(fp);
-        fp = fopen("data.txt", "a");
-        fprintf(fp, " \n%d,%d,%d", users ->cardUid, users ->status, users ->date);
-        fclose(fp);*/
-        break;
-    case 2:
-        int cardnum; //for altering acces/removing profile
-        printf("These are the curent cards in the system:\n");
-        cardsInSystem(users, amountOfCards);
-        printf("Enter the Uid of the users you want to Acces:\n");
-        scanf(" %d", &cardnum);
-
-        for(Card *card = users; card < users + *amountOfCards; card++){
-            if(card ->cardUid == cardnum){
-                printf(" Card: %d  was found, Do you want to 1.Adjust acces or 2.Remove a profile?\n", cardnum);
-                scanf(" %d", &choise);
-                if (choise == 1){
-                    printf("shold the card have acces or not? 1.Yes, 2.No\n");
-                    scanf(" %d", &choise);
-                    if(choise == 1){
-                        card ->status = 1;
-                        printf("Acces has been updated and added on the card\n");
-                    }else if(choise == 2){
-                        card ->status = 0;
-                        printf("Acces has been updated uppdated and removed on the card\n");
-                    }
-                }else if(choise == 2){            
-                    printf("Are you want to sure you want to REMOVE the users profile? 1.Yes, 2.No\n");
-                    scanf(" %d", &choise);
-                    if(choise == 1){
-                        card ->status = 1;
-                        *amountOfCards = *amountOfCards -1;
-                        /*fp = fopen("data.txt", "w");
-                        fileWright(fp, amountOfCards);
-                        fclose(fp);*/
-                        printf("Acces has been updated\n");
-                    }else{
-                        printf("Unexpected error, somthing went wrong\n");
-                    }
-                }    
-            } 
-        }
-        printf("No users with Uid nr: %d was found.",users ->cardUid);
-            break;
-    default:
-        break;
-    }   
-}
-
-void readFromFile(const char *filename, Card *users, int *amountOfCards){
-    FILE *fp = fopen(filename, "r");
-    if(fp == NULL){
-        printf("Error: Failed to open file\n");
-    }else if(fscanf(fp, " %d", amountOfCards) != 1){
-        printf("Error: Faild reading user count");
-    }else{    
-        printf("File opend succesfully\n");
-        fscanf(fp, " %d", amountOfCards);
-        for(int i = 0; i < *amountOfCards; i++){
-            if(fscanf(fp, " %d %d %d", &users[i].cardUid, &users[i].status, &users[i].date) != 3){
-                printf("Error reading card at line: %d\n", i+2);
-                *amountOfCards = i;
-                break;
-            }        
-        }
-    }
-    fclose(fp);
-}
-void wrightToFile(const char *filename, Card *users, int *amountOfCards){
-    FILE *fp = fopen(filename, "w");
-    if(fp == NULL){
-    printf("Error: Failed to open file\n");
-    return;
-    }
-    fprintf(fp, "%d\n", *amountOfCards);
-    for(int i = 0; i < *amountOfCards; i++){
-        fprintf(fp, " %d %d %d\n", users[i].cardUid, users[i].status, users[i].date);
-
-    }
-    fclose(fp);
-}
 
 int main(){
-    int amountOfCards = 0;
-    Card users[amountOfCards +1];//kolla hur mallock funkar
-    readFromFile("data.txt", users, &amountOfCards);
-    
-    printf(" %d!!!\n", amountOfCards);///Ta bort sen
-    
+    CARDLIST cardList;
+    cardList.allCards = NULL;
+    cardList.amountOfCards = 0;
+    const char filename[] = "data.txt";
+    char inputBuffer[64]; // store user input
+    long numValueOfInput;
+    INPUT_RESULT inputResult; //stores the return from GETINPUT
+  
+    readFromFile(filename,&cardList, &cardList.amountOfCards); //retreve data form file
+
     while(true){
         printMenue();
         int option;
-        scanf(" %d", &option);
-        switch(option){
+        int subOption;
+
+       // while(true){
+            inputResult = ValidateResult("Select menu option\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput);
+            //if(inputResult != INPUT_RESULT_OK){
+              // continue;
+           /// }
+         //   break;
+       // }
+            option = (int)numValueOfInput;
+            switch(option){
             case 1:
-                remoteOpen();
+                remoteOpen(&admin); //calls remotedoor open with admin profile whome hase acces
                 break;
             case 2:
-                if(amountOfCards > 0){
-                    cardsInSystem(users, &amountOfCards);
+                if(cardList.amountOfCards > 0 && cardList.allCards != NULL){ //check if there are cards in system
+                    cardsInSystem(&cardList);   // list all cards for user
                 }else{
-                    printf("There are curently no users in the system\n");
-                    break;
+                    printf("There are curently no cards in the system\n");
                 }
                 break;
+
             case 3:
-                int choise;
-                printf("\nDo you want to 1.Add or 2.Adjust/Remove profile?\n");
-                scanf(" %d", &choise);
-                start:
-                if(choise == 1){
-                    addRemoveAccess(/*fp*/&users[amountOfCards], choise, &amountOfCards);
-                    //amountOfCards++;
-                    printf(" %d", amountOfCards);
-                    printf("Do you want to add another user? 1.Yes, 2.No\n");
-                    scanf(" %d", &choise);
-                    if(choise == 1){
-                        goto start;
-                    }else{
+                bool returnToMenu = false; 
+                //while(!returnToMenu){
+                    inputResult = ValidateResult("\nDo you want to 1.Add, 2.Adjust/Remove profile? | Press X to go back\n",  inputBuffer,sizeof(inputBuffer), &numValueOfInput);
+                    if(inputResult == INPUT_EXIT){
+                        returnToMenu = true;
                         break;
+                    //}else 
+                      //  continue;
+                   // }
+                       
+                    subOption  = (int)numValueOfInput;
+
+                    if(subOption == 1){ //add new card profile
+                        do {
+                            addRemoveAccess(filename,&cardList, &subOption, &cardList.amountOfCards, inputBuffer, &numValueOfInput);
+                           // while(true){
+                                inputResult = ValidateResult("Do you want to add another user? 1.Yes, 2/X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput);
+                                if(inputResult == INPUT_EXIT){
+                                    returnToMenu = true;
+                                    break;
+                                }//else if(inputResult != INPUT_RESULT_OK){
+                                    continue;
+                              //  }
+                                subOption = (int)numValueOfInput;        
+                                break;
+                            //}
+                        }while(subOption == 1 && !returnToMenu); 
+                        break;
+                    }else if(subOption == 2){ //adjust or remove vard profile
+                        do{
+                            if(cardList.amountOfCards == 0){
+                                printf("No cards curently in system\n");
+                                break;
+                            }
+                            addRemoveAccess(filename,&cardList, &subOption, &cardList.amountOfCards, inputBuffer, &numValueOfInput);
+                            //while(true){
+                                inputResult = ValidateResult("Do you want to acces another card profile? 1.Yes, 2/X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput);
+                                //if(inputResult == INPUT_EXIT){
+                                    //returnToMenu = true;
+                                  //  break;
+                                //}else if(inputResult != INPUT_RESULT_OK){
+                                //    continue;
+                              //  }
+
+                                subOption = (int)numValueOfInput;        
+                                break;  
+                            //}
+
+                        }while(subOption == 1 && !returnToMenu);
                     }
-                }else if(choise == 2){
-                    printf("Hello");
-                    addRemoveAccess(/*fp*/users, choise, &amountOfCards);
-                    //amountOfCards--;
-                }else{
-                    printf("Error: %d is not a valid choise", choise);
-                }
-                break;
+                //}
+               // break; 
+            
             case 4:
                 //spara data innan stännga?
+                free(cardList.allCards);
                 return 0;
             case 9:
+                cardScan(&cardList);
                 break; 
             default:
-                printf("Error: %d is invalid input\n", option);
+                printf("Error is invalid input\n");
                 continue;
-
         } 
+        
     }
-  
     return 0;
 }
 

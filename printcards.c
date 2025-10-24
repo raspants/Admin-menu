@@ -1,15 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+#include "printcards.h"
 
-typedef struct{
-    int cardUid; 
-    int status;
-    int date;
-    } Card;
-
-void cardsInSystem(FILE *fp, Card *users, int *amountOfCards){
+void cardsInSystem(CARDLIST *cardList){
     printf("All cards in system\n");
-    for(Card *card = users; card < users + *amountOfCards; card++){
+    for (Card *card = cardList->allCards; card < cardList->allCards + cardList->amountOfCards; card++){
         char curentStatus[25];
         if(card ->status == 0){
             strcpy(curentStatus, "No Acces Added to system");
@@ -18,6 +13,5 @@ void cardsInSystem(FILE *fp, Card *users, int *amountOfCards){
         }
         
         printf("Uid:%d  %s:  %d\n", card ->cardUid, curentStatus, card ->date);
-    } 
-        
-} 
+    }     
+}

@@ -20,6 +20,12 @@
         "stdio.h": "c",
         "stdlib.h": "c",
         "remoteopen.h": "c",
-        "fileconfig.h": "c"
+        "fileconfig.h": "c",
+        "printcards.h": "c",
+        "addremoveacces.h": "c",
+        "filehandeling.h": "c",
+        "cardstructure.h": "c",
+        "format": "c",
+        "adminprofile.h": "c"
     }
 }
