@@ -35,90 +35,63 @@ bool parseFloat(const char *str, float *val)
 }
 
 
-bool GetInputInt(char* prompt, int* value)
-{
-	char buff[255];
-	if (GetInput(prompt, buff, sizeof(buff)) != INPUT_RESULT_OK)
-		return false;
-	long l = LONG_MIN;
-    if(!parseLong(buff,&l)) return false;
-	*value = l;
-	return true;
-}
 
-
-
-bool GetInputFloat(char* prompt, float* value)
-{
-	char buff[255];
-	if (GetInput(prompt, buff, sizeof(buff)) != INPUT_RESULT_OK)
-		return false;
-	float l = -100000000.0f;
-
-    if(!parseFloat(buff,&l)) return false;
-	*value = l;
-	return true;
-}
-
-
-bool GetInputChar(char* prompt, char* value)
-{
-	char buff[255];
-	if (GetInput(prompt, buff, sizeof(buff)) != INPUT_RESULT_OK)
-		return false;
-	*value = buff[0];
-	return true;
-}
-
-
-INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize)
+INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInput)
 {
 
 	if (prompt != NULL && strlen(prompt) > 0)
 	{
 		printf("%s", prompt);
 	}
-	if (fgets(buff, maxSize, stdin) == NULL || (strlen(buff) == 1 && buff[0] == '\n'))
-		return INPUT_RESULT_NO_INPUT; 
-    
 
-	// If it was too long, there'll be no newline. In that case, we flush
-	// to end of line so that excess doesn't affect the next call.
+	if (fgets(buff, maxSize, stdin) == NULL || (strlen(buff) == 1 && buff[0] == '\n'))
+	{
+		printf("ERROR_MESSAGE: NO_INPUT_DETECTED\n");
+		return INPUT_RESULT_NO_INPUT; 
+	}
+
 	if (buff[strlen(buff) - 1] != '\n') {
 		int extra = 0;
 		char ch;
 		while (((ch = getchar()) != '\n') && (ch != EOF))
 			extra = 1;
-		return (extra == 1) ? INPUT_RESULT_TOO_LONG : INPUT_RESULT_OK;
+
+		if (extra == 1) {
+        	printf("ERROR_MESSAGE: INVALID_INPUT_LEGNT, allowed length :%d characters.\n", maxSize - 2);
+        	return INPUT_RESULT_TOO_LONG;
+		}
 	}
 
-	// Otherwise remove newline and give string back to caller.
 	buff[strlen(buff) - 1] = '\0';
+	
+
+	if(toupper(buff[0]) == 'X' && buff[1] == '\0') // if input 'X' aka user vants to go a back to main menu
+		return INPUT_EXIT;
+    
+	if(!parseLong(buff, numValueOfInput)) // if input not a number
+	{
+		printf("ERROR_MESSAGE: INVALID_INPUT_TYPE\n");
+		return INPUT_RESULT_INVALID;
+	}
+    
+	// If it was too long, there'll be no newline. In that case, we flush
+	// to end of line so that excess doesn't affect the next call.
+	
+
+	// Otherwise remove newline and give string back to caller.
+
 	return INPUT_RESULT_OK;
 }
-
-
-
-// int main2()
-// {
-// 	//char* s = "";
-// 	//scanf("%s", s);
-// 	//printf(s);
-
-// 	//char buf[10];
-// 	//scanf("%s", buf);
-
-// 	char name[80];
-// 	INPUT_RESULT res = GetInput("Skriv in namn", name, sizeof(name));
-// 	if (res != INPUT_RESULT_OK) return;
-
-
-// 	if (name == "Stefan")
-// 	{
-// 		/* Funkar alltså inte - hurrra för C*/
-// 		printf("Ja");
-// 	}
-
-// 	printf("Hejsan %s", name);
-
-// }
+INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValueOfInput){
+	INPUT_RESULT result;
+	while(true){
+		result = GetInput(prompt, buff, maxSize, numValueOfInput);
+		if(result == INPUT_EXIT){
+			return INPUT_EXIT;
+		}
+		if(result == INPUT_RESULT_OK){
+			return INPUT_RESULT_OK;
+		}
+		continue;
+	}
+}
