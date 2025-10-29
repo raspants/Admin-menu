@@ -5,7 +5,7 @@
 typedef struct{
     int cardUid; 
     int status;
-    int date;
+    char date[18];
     } Card;
 typedef struct{
     Card *allCards;

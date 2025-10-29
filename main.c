@@ -12,6 +12,8 @@
 #include "adminprofile.h"
 #include "cardScan.h"
 #include "safeinput.h"
+#include "clearCls.h"
+
 
 int main(){
     CARDLIST cardList;
@@ -25,11 +27,12 @@ int main(){
     readFromFile(filename,&cardList, &cardList.amountOfCards); //retreve data form file
 
     while(true){
+       
         printMenue();
         int option;
         int subOption;
 
-        inputResult = ValidateResult("Select menu option\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 9);
+        inputResult = ValidateResult("       Select option\n\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 9);
     
         option = (int)numValueOfInput;
         switch(option){
@@ -38,7 +41,7 @@ int main(){
             break;
         case 2:
             if(cardList.amountOfCards > 0 && cardList.allCards != NULL){ //check if there are cards in system
-                cardsInSystem(&cardList);   // list all cards for user
+                cardsInSystem(&cardList, inputBuffer, &numValueOfInput, &inputResult);   // list all cards for user
             }else{
                 printf("There are curently no cards in the system\n");
             }
@@ -85,14 +88,15 @@ int main(){
                 }while(subOption == 1);
                 break;
             }   
-            
         case 4:
+            cardScan(&cardList, inputBuffer,sizeof(inputBuffer), &numValueOfInput, &inputResult);
+            break; 
+
+        case 5:
             //spara data innan stännga?
             free(cardList.allCards);
             return 0;
-        case 9:
-            cardScan(&cardList, inputBuffer,sizeof(inputBuffer), &numValueOfInput, &inputResult);
-            break; 
+
         default:
             printf("Invalid option\n");
             continue;

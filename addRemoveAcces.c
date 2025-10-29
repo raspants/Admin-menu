@@ -31,10 +31,19 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         time_t timeFetch = time(NULL);
         struct tm tm = *localtime(&timeFetch);
         
-        int timeAndDate = (tm.tm_year + 1900) * 10000 + (tm.tm_mon +1) * 100 + (tm.tm_mday);
+        unsigned short year = (tm.tm_year + 1900);
+        unsigned char month =(tm.tm_mon +1);
+        unsigned char day = (tm.tm_mday);
+        unsigned char hour = (tm.tm_hour);
+        unsigned char minute = (tm.tm_min);
 
-        cardList ->allCards[*amountOfCards].date = timeAndDate;
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wformat-truncation"
 
+        snprintf(cardList ->allCards[cardList->amountOfCards].date, sizeof(cardList->allCards[cardList->amountOfCards].date), " %04d-%02d-%02d %02d:%02d", 
+                                                                                                                                year, month, day, hour, minute);
+        
+        #pragma GCC diagnostic pop
 
         *inputResult = ValidateResult("Enter acces status, 0.No acces, 1.Acces | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 0, 1);
         if(*inputResult == INPUT_EXIT){
@@ -58,11 +67,11 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         int action;
 
         printf("These are the curent cards in the system:\n");
-        cardsInSystem(cardList);
+        cardsInSystem(cardList, inputBuffer, numValueOfInput, inputResult);
 
         while(true){
-
-            *inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 110001, 999999);
+            //better way to add the stop value her might be to have the card Uid:s sorted in the array an have the max valu = cardUid of the last card
+            *inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 110001, 9999999);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }

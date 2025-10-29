@@ -5,7 +5,7 @@
 void cardScan(CARDLIST *cardList, char* buff, int maxSize, long* numValueOfInput, INPUT_RESULT *inputResult){
     int cardnum;
     while(true){
-        cardsInSystem(cardList);//bara så att du inte behöver memmorera kortnummer
+        cardsInSystem(cardList, buff, numValueOfInput, inputResult);//bara så att du inte behöver memmorera kortnummer
 
         printf("CURENTLY LAMP IS: OFF\n"); 
 

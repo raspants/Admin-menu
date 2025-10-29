@@ -26,7 +26,7 @@ void readFromFile(const char *filename, CARDLIST *cardList, int *amountOfCards){
         return;
     }
     for(int i = 0; i < *amountOfCards; i++){
-        if(fscanf(fp, " %d %d %d", &cardList ->allCards[i].cardUid, &cardList ->allCards[i].status, &cardList ->allCards[i].date) != 3){
+        if(fscanf(fp, " %d %d %s", &cardList ->allCards[i].cardUid, &cardList ->allCards[i].status, cardList ->allCards[i].date) != 3){
             printf("Error reading card at line: %d\n", i +2 );
             *amountOfCards = i;
         }        
@@ -44,7 +44,7 @@ void reWrihtToFile(const char *filename, CARDLIST *cardList, int *amountOfCards)
     fprintf(fp, "%d\n", cardList ->amountOfCards);
     
     for(int i = 0; i < *amountOfCards; i++){
-        if(fprintf(fp, "%d %d %d\n", cardList ->allCards[i].cardUid, cardList ->allCards[i].status, cardList ->allCards[i].date) <0){
+        if(fprintf(fp, "%d %d %s\n", cardList ->allCards[i].cardUid, cardList ->allCards[i].status, cardList ->allCards[i].date) <0){
             
             perror("ERROR: Filed to wriht data for card\n");
             fclose(fp);
