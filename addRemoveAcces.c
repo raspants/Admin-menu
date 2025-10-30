@@ -3,31 +3,46 @@
 #include "addRemoveAcces.h"
 #include "safeinput.h"
 
-int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, long *numValueOfInput, INPUT_RESULT *inputResult){
+int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){
+    int i = *amountOfCards -1;
+
+    while( i >= 0 && cardList->allCards[i].cardUid > *newCard){
+        cardList->allCards[i + 1] = cardList->allCards[i];
+        i--;
+    }
+    cardList ->allCards[i +1].cardUid = *newCard; 
+    return i +1;
+}
+
+int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, size_t inputBufferSize, long *numValueOfInput, INPUT_RESULT *inputResult){
     
     int acces;
-
+    int insertionPoint = *amountOfCards;
+ 
     switch (*option){
     case 1: //For adding new user
         cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards +1)));
         
-        int newCard = 110001;
+        int newCard = 110001; //startingpoint for card Uid
 
         if(*amountOfCards == 0){ 
-            cardList ->allCards[*amountOfCards].cardUid = newCard;
+            insertionPoint = 0;
+            cardList ->allCards[insertionPoint].cardUid = newCard; // assign if no cards i system
         }else{    
-            do{
-                for(int i = 0; i < *amountOfCards; i++){
-                    if(cardList ->allCards[i].cardUid == newCard){
+            //while(true){
+                for(int i = 0; i < *amountOfCards; i++){ 
+                    if(cardList ->allCards[i].cardUid <= newCard){ //check all card Uid and increas new Uid untill uniqe
                         newCard++;
-                    }else{
-                        cardList ->allCards[*amountOfCards].cardUid = newCard;
+                    }else{ // when confirmed new Uid is uniqe
+                        
+                        insertionPoint = sortCardArray(cardList, amountOfCards, &newCard); //sort cards befor injekting new card
+                       //insertionPoint to keep track where to injekt date and acces
                         break;
                     }
                 }
-            }while(cardList ->allCards[*amountOfCards].cardUid != newCard);
+           // }
         }
-
+        printf("insertionpoint %d", insertionPoint);
         time_t timeFetch = time(NULL);
         struct tm tm = *localtime(&timeFetch);
         
@@ -40,20 +55,20 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         #pragma GCC diagnostic push
         #pragma GCC diagnostic ignored "-Wformat-truncation"
 
-        snprintf(cardList ->allCards[cardList->amountOfCards].date, sizeof(cardList->allCards[cardList->amountOfCards].date), " %04d-%02d-%02d %02d:%02d", 
+        snprintf(cardList ->allCards[insertionPoint].date, sizeof(cardList->allCards[insertionPoint].date), " %04d-%02d-%02d %02d:%02d", 
                                                                                                                                 year, month, day, hour, minute);
         
         #pragma GCC diagnostic pop
 
-        *inputResult = ValidateResult("Enter acces status, 0.No acces, 1.Acces | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 0, 1);
+        *inputResult = ValidateResult("Enter acces status, 0.No acces, 1.Acces | Press X to go back main menu\n", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
         if(*inputResult == INPUT_EXIT){
             return INPUT_EXIT;
         }
 
         acces = (int)*numValueOfInput;//parse from long to int, wold be extream edge case to get overflow 
-        cardList ->allCards[*amountOfCards].status = acces;
+        cardList ->allCards[insertionPoint].status = acces;
         
-        *amountOfCards = *amountOfCards + 1;
+        *amountOfCards = *amountOfCards + 1; 
        
         reWrihtToFile(filename, cardList, amountOfCards);
         return 0;
@@ -67,11 +82,11 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         int action;
 
         printf("These are the curent cards in the system:\n");
-        cardsInSystem(cardList, inputBuffer, numValueOfInput, inputResult);
+        cardsInSystem(cardList, inputBuffer, inputBufferSize, numValueOfInput, inputResult);
 
         while(true){
             //better way to add the stop value her might be to have the card Uid:s sorted in the array an have the max valu = cardUid of the last card
-            *inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 110001, 9999999);
+            *inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer, inputBufferSize, numValueOfInput, 110001, cardList ->allCards[-1].cardUid);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }
@@ -92,7 +107,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             break;               
         } 
 
-        *inputResult = ValidateResult("1.Adjust acces, 2.Remove a profile  | Press X to go back main menu\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 1, 2);
+        *inputResult = ValidateResult("1.Adjust acces, 2.Remove a profile  | Press X to go back main menu\n", inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
         if(*inputResult == INPUT_EXIT){
             return INPUT_EXIT;
         }
@@ -100,7 +115,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         action = (int)*numValueOfInput;
         if(action == 1){
            
-            *inputResult = ValidateResult("Shold the card have acces or not? 0.No, 1.Yes\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 0, 1);
+            *inputResult = ValidateResult("Shold the card have acces or not? 0.No, 1.Yes\n", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }  
@@ -123,7 +138,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         }else if(action == 2){            
            
  
-            *inputResult = ValidateResult("Are you sure you want to REMOVE the cards profile? 1.Yes, 2.No\n", inputBuffer,sizeof(inputBuffer), numValueOfInput, 1, 2);
+            *inputResult = ValidateResult("Are you sure you want to REMOVE the cards profile? 1.Yes, 2.No\n", inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }

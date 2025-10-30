@@ -13,6 +13,7 @@
 #include "cardScan.h"
 #include "safeinput.h"
 #include "clearCls.h"
+#define INPUT_BUFF_SIZE 64
 
 
 int main(){
@@ -20,7 +21,7 @@ int main(){
     cardList.allCards = NULL;
     cardList.amountOfCards = 0;
     const char filename[] = "data.txt";
-    char inputBuffer[64]; // store user input
+    char inputBuffer[INPUT_BUFF_SIZE]; // store user input
     long numValueOfInput;
     INPUT_RESULT inputResult; //stores the return from GETINPUT
   
@@ -32,7 +33,7 @@ int main(){
         int option;
         int subOption;
 
-        inputResult = ValidateResult("       Select option\n\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 9);
+        inputResult = ValidateResult("       Select option\n\n", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 9);
     
         option = (int)numValueOfInput;
         switch(option){
@@ -41,28 +42,26 @@ int main(){
             break;
         case 2:
             if(cardList.amountOfCards > 0 && cardList.allCards != NULL){ //check if there are cards in system
-                cardsInSystem(&cardList, inputBuffer, &numValueOfInput, &inputResult);   // list all cards for user
+                cardsInSystem(&cardList, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);   // list all cards for user
             }else{
                 printf("There are curently no cards in the system\n");
             }
             break;
 
         case 3:
-
-            //do{    
-                inputResult = ValidateResult("\nDo you want to 1.Add, 2.Adjust/Remove profile? | Press X to go back\n",  inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 2);
+   
+                inputResult = ValidateResult("\nDo you want to 1.Add, 2.Adjust/Remove profile? | Press X to go back\n",  inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 2);
                 if(inputResult == INPUT_EXIT){
                     break;
                 }
                 option = (int)numValueOfInput;
-                
-            //}while(option != 1 && subOption != 2);    
+             
 
             if(option == 1){ 
                 do {
-                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, &numValueOfInput, &inputResult);
+                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, &inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
                     
-                    inputResult = ValidateResult("Do you want to add another user? 1.Yes, X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 1);
+                    inputResult = ValidateResult("Do you want to add another user? 1.Yes, X.Return to main menu\n", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
@@ -70,16 +69,16 @@ int main(){
                      
                 }while(subOption == 1); 
                 break;
-            }else if(option == 2){ //adjust or remove vard profile
+            }else if(option == 2){ //adjust or remove card profile
                 do{
                     if(cardList.amountOfCards == 0){
                         printf("No cards curently in system\n");
                         break;
                     }
 
-                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, &numValueOfInput, &inputResult);
+                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, &inputBuffer, INPUT_BUFF_SIZE,  &numValueOfInput, &inputResult);
                     
-                    inputResult = ValidateResult("Do you want to acces another card profile? 1.Yes, X.Return to main menu\n", inputBuffer,sizeof(inputBuffer), &numValueOfInput, 1, 1);
+                    inputResult = ValidateResult("Do you want to acces another card profile? 1.Yes, X.Return to main menu\n", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
@@ -89,11 +88,10 @@ int main(){
                 break;
             }   
         case 4:
-            cardScan(&cardList, inputBuffer,sizeof(inputBuffer), &numValueOfInput, &inputResult);
+            cardScan(&cardList, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
             break; 
 
         case 5:
-            //spara data innan stännga?
             free(cardList.allCards);
             return 0;
 

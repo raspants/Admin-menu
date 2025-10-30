@@ -26,7 +26,7 @@ void readFromFile(const char *filename, CARDLIST *cardList, int *amountOfCards){
         return;
     }
     for(int i = 0; i < *amountOfCards; i++){
-        if(fscanf(fp, " %d %d %s", &cardList ->allCards[i].cardUid, &cardList ->allCards[i].status, cardList ->allCards[i].date) != 3){
+        if(fscanf(fp, " %d %d %17[0-9- :]", &cardList ->allCards[i].cardUid, &cardList ->allCards[i].status, cardList ->allCards[i].date) != 3){
             printf("Error reading card at line: %d\n", i +2 );
             *amountOfCards = i;
         }        
