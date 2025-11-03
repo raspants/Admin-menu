@@ -67,6 +67,8 @@ void cardsInSystem(CARDLIST *cardList, char *inputBuffer, size_t inputBufferSize
     if(cardList->amountOfCards == 0){
         printf(" %*s", (fullDisplaywidth / 2), "No cards in System\n");
         dynamicHeaderLinePrint(&fullDisplaywidth, "-");
+        int clear;
+        while((clear = getchar()) != '\n' && clear != EOF);
         *inputResult = ValidateResult("X to go back to main menu\n",  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
         return;
     }
@@ -84,7 +86,7 @@ void cardsInSystem(CARDLIST *cardList, char *inputBuffer, size_t inputBufferSize
         allCardDevideLines(&longestUid, (int)sizeof(curentStatus), (int)strlen(card ->date));
     }   
     
-    *inputResult = ValidateResult("X to go back to main menu\n",  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
+    *inputResult = ValidateResult("X to continue\n",  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
     if(*inputResult == INPUT_EXIT)
         return;
                     

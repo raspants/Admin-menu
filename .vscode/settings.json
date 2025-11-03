@@ -29,6 +29,7 @@
         "adminprofile.h": "c",
         "limits.h": "c",
         "safeinput.h": "c",
-        "clearcls.h": "c"
+        "clearcls.h": "c",
+        "random": "c"
     }
 }

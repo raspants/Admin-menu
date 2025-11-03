@@ -13,6 +13,7 @@ void remoteOpen(Card *profile){
     int retTime = time(0) + 3; //testas sleep() och Sleep()
     while (time(0) < retTime)
 	    ;
+        return;
     }
     else if(profile ->status == 0){
         printf("CURENTLY LAMP IS: "BOLD RED"RED"RESET"\n");

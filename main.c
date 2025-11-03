@@ -59,7 +59,7 @@ int main(){
 
             if(option == 1){ 
                 do {
-                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, &inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
+                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
                     
                     inputResult = ValidateResult("Do you want to add another user? 1.Yes, X.Return to main menu\n", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
@@ -76,7 +76,7 @@ int main(){
                         break;
                     }
 
-                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, &inputBuffer, INPUT_BUFF_SIZE,  &numValueOfInput, &inputResult);
+                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE,  &numValueOfInput, &inputResult);
                     
                     inputResult = ValidateResult("Do you want to acces another card profile? 1.Yes, X.Return to main menu\n", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){

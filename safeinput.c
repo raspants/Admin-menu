@@ -6,14 +6,14 @@
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
 #define BOLD    "\033[1m"
-
+//left in som debug printfs i comented out
 
 bool parseLong(const char *str, long *val)
 {
     char *temp;
     bool rc = true;
     errno = 0;
-    *val = strtol(str, &temp, 0);
+    *val = strtol(str, &temp, 10);
 
     if (temp == str || *temp != '\0' ||
         ((*val == LONG_MIN || *val == LONG_MAX) && errno == ERANGE))
@@ -41,7 +41,7 @@ bool parseFloat(const char *str, float *val)
 
 INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInput, const int rangeValueMin, const int rangeValueMax)
 {
-
+	//printf("DEBUG: GetInput called with min = %d, max = %d\n", rangeValueMin, rangeValueMax);
 	if (prompt != NULL && strlen(prompt) > 0)
 	{
 		printf("%s", prompt);
@@ -81,8 +81,10 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 		return INPUT_RESULT_INVALID;
 	}
     
+	//printf("DEBUG: range min = %d, range max = %d\n", rangeValueMin, rangeValueMax);
 	
 	if((int)*numValueOfInput > rangeValueMax || (int)*numValueOfInput < rangeValueMin){
+		printf("DEBUG: parsed value = %ld\n", *numValueOfInput);
 		printf(BOLD RED"ERROR_MESSAGE: INPUT_OUT_OF_RANGE\n"RESET);
 		return INPUT_RESULT_INVALID;
 	}
@@ -90,9 +92,10 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 	// Otherwise remove newline and give string back to caller.
 
 	return INPUT_RESULT_OK;
-}
-INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValueOfInput,  const int rangeValueMin, const int rangeValueMax){
+}                          
+INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValueOfInput, const int rangeValueMin, const int rangeValueMax){
 	INPUT_RESULT result;
+	//printf("DEBUG: ValidateResult called with min = %d, max = %d\n", rangeValueMin, rangeValueMax);
 	while(true){
 		result = GetInput(prompt, buff, maxSize, numValueOfInput, rangeValueMin, rangeValueMax);
 		if(result == INPUT_EXIT){

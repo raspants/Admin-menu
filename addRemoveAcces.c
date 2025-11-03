@@ -3,46 +3,39 @@
 #include "addRemoveAcces.h"
 #include "safeinput.h"
 
-int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){
-    int i = *amountOfCards -1;
 
-    while( i >= 0 && cardList->allCards[i].cardUid > *newCard){
-        cardList->allCards[i + 1] = cardList->allCards[i];
-        i--;
-    }
-    cardList ->allCards[i +1].cardUid = *newCard; 
-    return i +1;
-}
+int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard);
+
 
 int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, size_t inputBufferSize, long *numValueOfInput, INPUT_RESULT *inputResult){
     
-    int acces;
-    int insertionPoint = *amountOfCards;
- 
     switch (*option){
     case 1: //For adding new user
         cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards +1)));
-        
+        if (!cardList->allCards) {
+            perror("realloc failed");//fixa sen
+            exit(EXIT_FAILURE);
+        }
         int newCard = 110001; //startingpoint for card Uid
+        int acces;
+        int insertionPoint = *amountOfCards;
 
         if(*amountOfCards == 0){ 
             insertionPoint = 0;
             cardList ->allCards[insertionPoint].cardUid = newCard; // assign if no cards i system
         }else{    
-            //while(true){
-                for(int i = 0; i < *amountOfCards; i++){ 
-                    if(cardList ->allCards[i].cardUid <= newCard){ //check all card Uid and increas new Uid untill uniqe
-                        newCard++;
-                    }else{ // when confirmed new Uid is uniqe
-                        
-                        insertionPoint = sortCardArray(cardList, amountOfCards, &newCard); //sort cards befor injekting new card
-                       //insertionPoint to keep track where to injekt date and acces
-                        break;
-                    }
+      
+            for(int i = 0; i < *amountOfCards; i++){ 
+                if(cardList ->allCards[i].cardUid <= newCard){ //check all card Uid and increas new Uid untill uniqe
+                    newCard++;
+                }else{ // when confirmed new Uid is uniq   
+                    break;
                 }
-           // }
+            }   
         }
-        printf("insertionpoint %d", insertionPoint);
+        //sort cards befor injekting new card
+        insertionPoint = sortCardArray(cardList, amountOfCards, &newCard); //insertionPoint to keep track where to injekt date and acces 
+
         time_t timeFetch = time(NULL);
         struct tm tm = *localtime(&timeFetch);
         
@@ -52,10 +45,10 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         unsigned char hour = (tm.tm_hour);
         unsigned char minute = (tm.tm_min);
 
-        #pragma GCC diagnostic push
+        #pragma GCC diagnostic push //ignore error message for overflow risk in formated string print
         #pragma GCC diagnostic ignored "-Wformat-truncation"
 
-        snprintf(cardList ->allCards[insertionPoint].date, sizeof(cardList->allCards[insertionPoint].date), " %04d-%02d-%02d %02d:%02d", 
+        snprintf(cardList ->allCards[insertionPoint].date, sizeof(cardList->allCards[insertionPoint].date), "%04d-%02d-%02d %02d:%02d", 
                                                                                                                                 year, month, day, hour, minute);
         
         #pragma GCC diagnostic pop
@@ -66,9 +59,10 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         }
 
         acces = (int)*numValueOfInput;//parse from long to int, wold be extream edge case to get overflow 
+        printf("insertionpoint %d",insertionPoint);
         cardList ->allCards[insertionPoint].status = acces;
         
-        *amountOfCards = *amountOfCards + 1; 
+        *amountOfCards += 1; //only increment after inserion of date and acces
        
         reWrihtToFile(filename, cardList, amountOfCards);
         return 0;
@@ -81,12 +75,11 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         bool foundcard = false;
         int action;
 
-        printf("These are the curent cards in the system:\n");
         cardsInSystem(cardList, inputBuffer, inputBufferSize, numValueOfInput, inputResult);
 
         while(true){
             //better way to add the stop value her might be to have the card Uid:s sorted in the array an have the max valu = cardUid of the last card
-            *inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer, inputBufferSize, numValueOfInput, 110001, cardList ->allCards[-1].cardUid);
+            *inputResult = ValidateResult("Enter the UID of the cardprofile you want to Acces  | Press X to go back main menu\n", inputBuffer, inputBufferSize, numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }
@@ -167,4 +160,17 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
     default:
        return 0;
     }   
+}
+
+int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){
+    
+    int i = *amountOfCards -1;
+
+    while( i >= 0 && cardList->allCards[i].cardUid > *newCard){
+        cardList->allCards[i + 1] = cardList->allCards[i];
+        i--;
+    }
+   // int insertionIndex = i + 1;
+    cardList ->allCards[i + 1].cardUid = *newCard; 
+    return i + 1;
 }

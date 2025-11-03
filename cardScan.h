@@ -7,6 +7,6 @@
 #ifndef CARDSCAN_H
 #define CARDSCAN_H
 
-void cardScan(CARDLIST *cardList, char* buff, int maxSize, long* numValueOfInput, INPUT_RESULT *inputResult);
+void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numValueOfInput, INPUT_RESULT *inputResult);
 
 #endif

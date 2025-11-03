@@ -12,7 +12,6 @@ typedef enum {
     INPUT_EXIT
 } INPUT_RESULT;
 
-void bufferFlush();
 INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long *numValueOfInput, const int rangeValueMin, const int rangeValueMax);
 
 INPUT_RESULT ValidateResult(char* prompt, char* buff, int maxSize, long* numValueOfInput, const int rangeValueMin, const int rangeValueMax); 
