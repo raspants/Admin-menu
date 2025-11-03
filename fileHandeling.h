@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "cardStructure.h"
 
 #ifndef FILEHANDELING_H

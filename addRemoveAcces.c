@@ -1,11 +1,14 @@
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "addRemoveAcces.h"
 #include "safeinput.h"
-
+#include "cardStructure.h"
+#include "printcards.h"
+#include "fileHandeling.h"
 
 int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard);
-
 
 int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, size_t inputBufferSize, long *numValueOfInput, INPUT_RESULT *inputResult){
     
@@ -162,7 +165,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
     }   
 }
 
-int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){
+int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){ //sort cards in array by card Uid, used later for defining range of carUid input in serch
     
     int i = *amountOfCards -1;
 

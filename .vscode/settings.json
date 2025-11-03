@@ -30,6 +30,7 @@
         "limits.h": "c",
         "safeinput.h": "c",
         "clearcls.h": "c",
-        "random": "c"
+        "random": "c",
+        "ctype.h": "c"
     }
 }

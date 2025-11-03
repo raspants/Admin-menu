@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "clearCls.h"
 #include "menu.h"
 
 #define RESET   "\033[0m"

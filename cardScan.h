@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include "cardStructure.h"
-#include "printcards.h"
-#include "remoteopen.h"
-#include "safeinput.h"
-
 #ifndef CARDSCAN_H
 #define CARDSCAN_H
 

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fileHandeling.h"
-
+#include "cardStructure.h"
 
 void readFromFile(const char *filename, CARDLIST *cardList, int *amountOfCards){
     FILE *fp = fopen(filename, "r");

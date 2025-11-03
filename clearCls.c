@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "clearCls.h"
 
 void clearCls(){

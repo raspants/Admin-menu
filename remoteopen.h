@@ -1,6 +1,8 @@
+#include "cardStructure.h"
+
 #ifndef REMOTEOPEN_H
 #define REMOTEOPEN_H
 
-void remoteOpen();
+void remoteOpen(Card *profile);
 
 #endif

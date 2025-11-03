@@ -1,4 +1,8 @@
+#include <stdio.h>
 #include "cardScan.h"
+#include "cardStructure.h"
+#include "printcards.h"
+#include "remoteopen.h"
 #include "safeinput.h"
 
 
