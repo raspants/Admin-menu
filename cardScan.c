@@ -20,6 +20,7 @@ void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numV
        for(int i = 0; i < cardList ->amountOfCards; i++){ 
           if(cardnum == cardList->allCards[i].cardUid){
                remoteOpen(cardList ->allCards[i]); 
+               break;
             }else if(cardnum != cardList->allCards[i].cardUid && i == cardList ->amountOfCards -1){
                  printf("Card not found in system\n");
             }
