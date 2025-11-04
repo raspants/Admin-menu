@@ -85,7 +85,7 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 	//printf("DEBUG: range min = %d, range max = %d\n", rangeValueMin, rangeValueMax);
 	
 	if((int)*numValueOfInput > rangeValueMax || (int)*numValueOfInput < rangeValueMin){
-		printf("DEBUG: parsed value = %ld\n", *numValueOfInput);
+		//printf("DEBUG: parsed value = %ld\n", *numValueOfInput);
 		printf(BOLD RED"ERROR_MESSAGE: INPUT_OUT_OF_RANGE\n"RESET);
 		return INPUT_RESULT_INVALID;
 	}

@@ -1,4 +1,5 @@
 #include "cardStructure.h"
+#include "safeinput.h"
 
 #ifndef CARDSINSYSTEM_H
 #define CARDSINSYSTEM_H

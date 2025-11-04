@@ -1,3 +1,5 @@
+#include "cardStructure.h"
+#include "safeinput.h"
 #ifndef CARDSCAN_H
 #define CARDSCAN_H
 

@@ -1,22 +1,20 @@
 #include <stdio.h>
 #include "cardStructure.h"
 #include "timeDelay.h"
-#define RESET   "\033[0m"
-#define RED     "\033[31m"
-#define GREEN   "\033[32m"
-#define BOLD    "\033[1m"
+#include "colorpallet.h"
 
 void remoteOpen(Card *profile){ 
     
     if(profile ->status == 1){
-    printf("CURENTLY LAMP IS: "BOLD GREEN"Green"RESET"\n");
+    printf(CYAN"CURENTLY LAMP IS: "BOLD GREEN"Green"RESET"\n");
     timeDelay(3);
     }
     else if(profile ->status == 0){
-        printf("CURENTLY LAMP IS: "BOLD RED"RED"RESET"\n");
+        printf(CYAN"CURENTLY LAMP IS: "BOLD RED"RED"RESET"\n");
         timeDelay(3);
        }else{
-        printf("Card not found in system\n");
+        printf(RED"Card not found in system\n"RESET);
+        timeDelay(3);
     }
     return;
 }

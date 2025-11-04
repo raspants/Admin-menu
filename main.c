@@ -4,6 +4,7 @@
 #include <time.h>
 #include <string.h>
 #include "menu.h"
+#include "timeDelay.h"
 #include "printcards.h"
 #include "remoteopen.h"
 #include "fileHandeling.h"
@@ -13,6 +14,7 @@
 #include "cardScan.h"
 #include "safeinput.h"
 #include "clearCls.h"
+#include "colorpallet.h"
 #define INPUT_BUFF_SIZE 64
 
 
@@ -33,7 +35,7 @@ int main(){
         int option;
         int subOption;
 
-        inputResult = ValidateResult("       Select option\n\n", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 9);
+        inputResult = ValidateResult(YELLOW"       Select option\n\n"CYAN" : "RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 5);
     
         option = (int)numValueOfInput;
         switch(option){
@@ -44,24 +46,27 @@ int main(){
             if(cardList.amountOfCards > 0 && cardList.allCards != NULL){ //check if there are cards in system
                 cardsInSystem(&cardList, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);   // list all cards for user
             }else{
-                printf("There are curently no cards in the system\n");
+                printf(CYAN"There are curently no cards in the system\n"RESET);
+                timeDelay(2); //to second dealy to display message before clear in cli
             }
             break;
 
         case 3:
-   
-                inputResult = ValidateResult("\nDo you want to 1.Add, 2.Adjust/Remove profile? | Press X to go back\n",  inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 2);
+                clearCls();
+                inputResult = ValidateResult(YELLOW"Option\n"GREEN"=======================\n"CYAN"[1] Add new profil\n[2] Adjust/Remove profile\n[X] Return to main menu\n"GREEN"=======================\n"RESET" :",  
+                                            inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 2);
+
                 if(inputResult == INPUT_EXIT){
                     break;
                 }
                 option = (int)numValueOfInput;
-             
+                
 
             if(option == 1){ 
                 do {
                     addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
                     
-                    inputResult = ValidateResult("Do you want to add another user? 1.Yes, X.Return to main menu\n", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
+                    inputResult = ValidateResult(YELLOW"Do you want to add another user\n"CYAN"[1] Yes\n[X] Return to main menu\n"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
@@ -72,13 +77,14 @@ int main(){
             }else if(option == 2){ //adjust or remove card profile
                 do{
                     if(cardList.amountOfCards == 0){
-                        printf("No cards curently in system\n");
+                        printf(CYAN"No cards curently in system\n"RESET);
+                        timeDelay(2);
                         break;
                     }
 
                     addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE,  &numValueOfInput, &inputResult);
                     
-                    inputResult = ValidateResult("Do you want to acces another card profile? 1.Yes, X.Return to main menu\n", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
+                    inputResult = ValidateResult(YELLOW"Do you want to acces another card profile\n"CYAN"[1] Yes\n[X] Return to main menu\n"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
@@ -96,7 +102,8 @@ int main(){
             return 0;
 
         default:
-            printf("Invalid option\n");
+            printf(RED"Invalid option\n");
+            timeDelay(2);
             continue;
         }
     }

@@ -4,16 +4,11 @@
 #include "safeinput.h"
 #include "printcards.h"
 #include "clearCls.h"
-#define RESET   "\033[0m"
-#define RED     "\033[31m"
-#define GREEN   "\033[32m"
-#define YELLOW  "\033[33m"
-#define CYAN    "\033[36m"
-#define BOLD    "\033[1m"
+#include "colorpallet.h"
 
 void dynamicHeaderLinePrint(int *lineLegnth, const char *character){
     for(int i = 0; i < *lineLegnth; i++){  
-        printf("%c", *character);
+        printf(GREEN"%c"RESET, *character);
     }
      printf("\n");
 }
@@ -61,16 +56,16 @@ void cardsInSystem(CARDLIST *cardList, char *inputBuffer, size_t inputBufferSize
     //_____________________________________________________________________________________
 
     dynamicHeaderLinePrint(&fullDisplaywidth, "=");
-    printf(" %*s\n",(longestUid + 38), "All cards in system");
+    printf(" %*s\n",(longestUid + 38), YELLOW"All cards in system"RESET);
     dynamicHeaderLinePrint(&fullDisplaywidth, "=");
 
     dynamicHeaderLinePrint(&fullDisplaywidth, "-");
     if(cardList->amountOfCards == 0){
-        printf(" %*s", (fullDisplaywidth / 2), "No cards in System\n");
+        printf(" %*s", (fullDisplaywidth / 2), YELLOW"No cards in System\n");
         dynamicHeaderLinePrint(&fullDisplaywidth, "-");
         int clear;
         while((clear = getchar()) != '\n' && clear != EOF);
-        *inputResult = ValidateResult("X to go back to main menu\n",  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
+        *inputResult = ValidateResult(CYAN"[X] Return to main menu\n"RESET,  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
         return;
     }
 
@@ -82,12 +77,12 @@ void cardsInSystem(CARDLIST *cardList, char *inputBuffer, size_t inputBufferSize
             strcpy(curentStatus, "   Acces Added to system");
         }
         
-        printf("| Uid: %-*d | %s | Eddit date: %s |\n",longestUid, card ->cardUid, curentStatus, card ->date);
+        printf("|"CYAN" Uid: %-*d "RESET"|"CYAN" %s "RESET"|"CYAN" Eddit date: %s "RESET"|\n",longestUid, card ->cardUid, curentStatus, card ->date);
         
         allCardDevideLines(&longestUid, (int)sizeof(curentStatus), (int)strlen(card ->date));
     }   
     
-    *inputResult = ValidateResult("X to continue\n",  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
+    *inputResult = ValidateResult(CYAN"[X] Continue\n"RESET,  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
     if(*inputResult == INPUT_EXIT)
         return;
                     

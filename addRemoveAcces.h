@@ -1,4 +1,5 @@
 #include "cardStructure.h"
+#include "safeinput.h"
 
 #ifndef ADDREMOVEACCES_H
 #define ADDREMOVEACCES_H

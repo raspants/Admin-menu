@@ -31,6 +31,7 @@
         "safeinput.h": "c",
         "clearcls.h": "c",
         "random": "c",
-        "ctype.h": "c"
+        "ctype.h": "c",
+        "colorpallet.h": "c"
     }
 }

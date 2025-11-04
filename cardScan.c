@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <stdbool.h>
+#include "clearCls.h"
 #include "cardScan.h"
 #include "cardStructure.h"
 #include "printcards.h"
 #include "remoteopen.h"
 #include "safeinput.h"
-
+#include "colorpallet.h"
 
 void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numValueOfInput, INPUT_RESULT *inputResult){
     int cardnum;
@@ -13,7 +15,7 @@ void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numV
 
         printf("CURENTLY LAMP IS: OFF\n"); 
 
-        *inputResult = ValidateResult("Scan card (i dont actiualy have any harware so pleas typ the number...) or X.Return to main menu\n", buff, sizeof(buff), numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
+        *inputResult = ValidateResult(CYAN"Scan card (i dont actiualy have any harware so pleas typ the number...) or X.Return to main menu\n"RESET, buff, sizeof(buff), numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
         if(*inputResult == INPUT_EXIT){
             return;
         }
@@ -23,14 +25,16 @@ void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numV
         //send card to remoteopen for acces eval if inputed cardUid exist
        for(int i = 0; i < cardList ->amountOfCards; i++){ 
           if(cardnum == cardList->allCards[i].cardUid){
-               remoteOpen(cardList ->allCards[i]); 
+               remoteOpen(&cardList ->allCards[i]); 
                break;
             }else if(cardnum != cardList->allCards[i].cardUid && i == cardList ->amountOfCards -1){
-                 printf("Card not found in system\n");
+                 printf(RED"Card not found in system\n");
             }
         }
-       
-        *inputResult = ValidateResult("1.Scan another? or X.Return to main menu\n", buff, sizeof(buff), numValueOfInput, 1, 1);
+        clearCls();
+        *inputResult = ValidateResult(YELLOW"       Option\n=======================\n"CYAN"[1] Scan another card \n[X] Return to main menu\n=======================\n"RESET,
+                                              buff, sizeof(buff), numValueOfInput, 1, 1);
+
         if(*inputResult == INPUT_EXIT){
             return;
         }
