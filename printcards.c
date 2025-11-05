@@ -22,7 +22,7 @@ void allCardDevideLines(int *longestUid, int legntBuff, int legnthDate){
         printf("-");    
     }
     printf("|");
-    for(int i = 0; i < legnthDate +14; i++){
+    for(int i = 0; i < legnthDate +17; i++){
         printf("-");    
     }
     printf("|\n");
@@ -77,7 +77,7 @@ void cardsInSystem(CARDLIST *cardList, char *inputBuffer, size_t inputBufferSize
             strcpy(curentStatus, "   Acces Added to system");
         }
         
-        printf("|"CYAN" Uid: %-*d "RESET"|"CYAN" %s "RESET"|"CYAN" Eddit date: %s "RESET"|\n",longestUid, card ->cardUid, curentStatus, card ->date);
+        printf("|"CYAN" Uid: %-*d "RESET"|"CYAN" %s "RESET"|"CYAN" Creation date: %s "RESET"|\n",longestUid, card ->cardUid, curentStatus, card ->date);
         
         allCardDevideLines(&longestUid, (int)sizeof(curentStatus), (int)strlen(card ->date));
     }   

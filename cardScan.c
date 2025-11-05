@@ -7,6 +7,7 @@
 #include "remoteopen.h"
 #include "safeinput.h"
 #include "colorpallet.h"
+#include "timeDelay.h"
 
 void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numValueOfInput, INPUT_RESULT *inputResult){
     int cardnum;
@@ -29,6 +30,7 @@ void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numV
                break;
             }else if(cardnum != cardList->allCards[i].cardUid && i == cardList ->amountOfCards -1){
                  printf(RED"Card not found in system\n");
+                 timeDelay(3);
             }
         }
         clearCls();

@@ -139,11 +139,8 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
                 printf(CYAN"Acces has been updated uppdated and removed on the card\n"RESET);
                 timeDelay(1);
                 return 0;
-            }//else{
-             //   printf("Invalid input\n");
-            //}
-            
-           
+            }
+              
         }else if(action == 2){            
            
  
@@ -153,7 +150,6 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             }
 
             action = (int)*numValueOfInput;
-            
 
             if(action == 1){
                 for(int i = index; i < *amountOfCards -1; i++){
