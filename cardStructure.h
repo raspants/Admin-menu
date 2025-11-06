@@ -8,7 +8,6 @@ typedef struct{
     char date[18];
     } Card;
 
-
 typedef struct{
     Card *allCards;
     int amountOfCards;

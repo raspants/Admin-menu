@@ -26,7 +26,7 @@ int main(){
     char inputBuffer[INPUT_BUFF_SIZE]; // store user input
     long numValueOfInput;
     INPUT_RESULT inputResult; //stores the return from GETINPUT
-  
+
     readFromFile(filename,&cardList, &cardList.amountOfCards); //retreve data form file
 
     while(true){
@@ -35,7 +35,7 @@ int main(){
         int option;
         int subOption;
 
-        inputResult = ValidateResult(YELLOW"       Select option\n\n"CYAN" : "RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 5);
+        inputResult = ValidateResult(YELLOW"       Select option\n\n"CYAN":"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 5);
     
         option = (int)numValueOfInput;
         switch(option){
@@ -53,7 +53,7 @@ int main(){
 
         case 3:
                 clearCls();
-                inputResult = ValidateResult(YELLOW"Option\n"GREEN"=======================\n"CYAN"[1] Add new profil\n[2] Adjust/Remove profile\n[X] Return to main menu\n"GREEN"=======================\n"RESET" :",  
+                inputResult = ValidateResult(YELLOW"Option\n"GREEN"=======================\n"CYAN"[1] Add new profil\n[2] Adjust/Remove profile\n[X] Return to main menu\n"GREEN"=======================\n"RESET":",  
                                             inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 2);
 
                 if(inputResult == INPUT_EXIT){
@@ -66,7 +66,7 @@ int main(){
                 do {
                     addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
                     
-                    inputResult = ValidateResult(YELLOW"Do you want to add another user\n"CYAN"[1] Yes\n[X] Return to main menu\n"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
+                    inputResult = ValidateResult(YELLOW"Do you want to add another user\n"CYAN"[1] Yes\n[X] Return to main menu\n:"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
@@ -84,7 +84,7 @@ int main(){
 
                     addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE,  &numValueOfInput, &inputResult);
                     
-                    inputResult = ValidateResult(YELLOW"Do you want to acces another card profile\n"CYAN"[1] Yes\n[X] Return to main menu\n"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
+                    inputResult = ValidateResult(YELLOW"Do you want to acces another card profile\n"CYAN"[1] Yes\n[X] Return to main menu\n"RESET":", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
                     if(inputResult == INPUT_EXIT){
                         break;
                     }

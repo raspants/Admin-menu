@@ -2,6 +2,7 @@
 #include "cardStructure.h"
 #include "timeDelay.h"
 #include "colorpallet.h"
+#include <windows.h>
 
 void remoteOpen(Card *profile){ 
     
@@ -15,6 +16,7 @@ void remoteOpen(Card *profile){
        }else{
         printf(RED"Card not found in system\n"RESET);
         timeDelay(3);
+        
     }
     return;
 }

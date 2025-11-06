@@ -15,6 +15,8 @@ int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard);
 
 int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, size_t inputBufferSize, long *numValueOfInput, INPUT_RESULT *inputResult){
     
+    //hade kunnat göras i separata funktioner för add, remove och adjust
+
     switch (*option){
     case 1: //For adding new user
         clearCls();
@@ -52,9 +54,9 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         unsigned char hour = (tm.tm_hour);
         unsigned char minute = (tm.tm_min);
 
-        printf(YELLOW"\n\nNew cardprofile generated: %d\n"GREEN"=================================\n"RESET, newCard); //not inserted in array 
+        printf(YELLOW"\n\nNew cardprofile generated:"CYAN" %d\n"GREEN"=================================\n"RESET, newCard); //not inserted in array yet
     
-        *inputResult = ValidateResult(YELLOW"\nEnter acces status\n"CYAN"[0] No acces\n[1] Acces\n[X] Return to main menu\n :"RESET, inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
+        *inputResult = ValidateResult(YELLOW"\nEnter acces status\n"CYAN"[0] No acces\n[1] Acces\n[X] Return to main menu\n"RESET":", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
         if(*inputResult == INPUT_EXIT){
             return INPUT_EXIT;
         }
@@ -68,7 +70,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         #pragma GCC diagnostic ignored "-Wformat-truncation"
 
         snprintf(cardList ->allCards[insertionPoint].date, sizeof(cardList->allCards[insertionPoint].date), "%04d-%02d-%02d %02d:%02d", //insert date at correct index
-                                                                                                                                year, month, day, hour, minute);
+                                                                                                        year, month, day, hour, minute);
         #pragma GCC diagnostic pop
 
 
@@ -114,7 +116,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             break;               
         } 
 
-        *inputResult = ValidateResult(YELLOW"Option\n[1] Adjust acces\n"CYAN"[2] Remove a profile\n[X] Return to main menu\n"RESET, inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
+        *inputResult = ValidateResult(YELLOW"Option\n"CYAN"[1] Adjust acces\n[2] Remove a profile\n[X] Return to main menu\n"RESET, inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
         if(*inputResult == INPUT_EXIT){
             return INPUT_EXIT;
         }
@@ -122,7 +124,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         action = (int)*numValueOfInput;
         if(action == 1){
            
-            *inputResult = ValidateResult(YELLOW"\nShold the cardprofile have\n"CYAN"[0] no acces\n[1].Acces\n :"RESET, inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
+            *inputResult = ValidateResult(YELLOW"\nShold the cardprofile have\n"CYAN"[0] No acces\n[1] Acces\n"RESET":", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }  
@@ -144,7 +146,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         }else if(action == 2){            
            
  
-            *inputResult = ValidateResult(YELLOW"Are you sure you want to REMOVE the cards profile\n"CYAN"[1]"RED" Yes\n"CYAN"[2].No\n"RESET, inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
+            *inputResult = ValidateResult(YELLOW"Are you sure you want to REMOVE the cards profile\n"CYAN"[1]"RED" Yes\n"CYAN"[2] No\n"RESET":", inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }
@@ -183,7 +185,6 @@ int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){ //sort 
         cardList->allCards[i + 1] = cardList->allCards[i];
         i--;
     }
-   // int insertionIndex = i + 1;
-    //cardList ->allCards[i + 1].cardUid = *newCard; 
+ 
     return i + 1;
 }
