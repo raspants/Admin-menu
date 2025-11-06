@@ -58,6 +58,11 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
     
         *inputResult = ValidateResult(YELLOW"\nEnter acces status\n"CYAN"[0] No acces\n[1] Acces\n[X] Return to main menu\n"RESET":", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
         if(*inputResult == INPUT_EXIT){
+            cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards))); //shrink array if user exits befor compleating card creation
+            if (!cardList->allCards) {
+                perror("realloc failed");
+                exit(EXIT_FAILURE);
+            }
             return INPUT_EXIT;
         }
          
@@ -86,8 +91,6 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         int index;
         bool foundcard = false;
         int action;
-
-        
 
         while(true){
             clearCls();
