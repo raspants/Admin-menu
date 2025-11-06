@@ -1,10 +1,27 @@
 PROG = main.exe 
-SRC = main.c menu.c printcards.c remoteopen.c fileHandeling.c addRemoveAcces.c cardScan.c safeinput.c clearCls.c timeDelay.c
+#CC-gcc
+DEPS=*.h
+SOURCES = main.c menu.c printcards.c remoteopen.c fileHandeling.c addRemoveAcces.c cardScan.c safeinput.c clearCls.c timeDelay.c
+
 CFLAGS=-Wall -Werror -g
 LIBS = 
-all: $(PROG)
-$(PROG): $(SRC)
-	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(SRC)  $(LIBS) 
+OUTPUTDIR=obj
+OBJS = $(addprefix $(OUTPUTDIR)/, $(SOURCES:.c=.o))
+
+all: $(OUTPUTDIR) $(PROG)
+
+$(PROG): $(OBJS) 
+	$(CC) -o $@ $^ $(CFLAGS)
+
+$(OUTPUTDIR)/%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(OUTPUTDIR):
+	@mkdir "$(OUTPUTDIR)"
+
 clean:
-	rm -f $(PROG)
-.PHONY: all clean
+	@del /q "$(OUTPUTDIR)" 
+	@del /q $(PROG)
+
+
+.PHONY: prep clean
