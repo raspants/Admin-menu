@@ -16,7 +16,7 @@ void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numV
 
         printf("CURENTLY LAMP IS: OFF\n"); 
 
-        *inputResult = ValidateResult(CYAN"Scan card (i dont actiualy have any harware so pleas typ the number...) or X.Return to main menu\n"RESET, buff, sizeof(buff), numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
+        *inputResult = ValidateResult(CYAN"Scan card (i dont actiualy have any harware so pleas typ the number...) or X.Return to main menu\n>"RESET, buff, sizeof(buff), numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
         if(*inputResult == INPUT_EXIT){
             return;
         }
@@ -34,7 +34,7 @@ void cardScan(CARDLIST *cardList, char* buff, size_t inputBufferSize, long* numV
             }
         }
         clearCls();
-        *inputResult = ValidateResult(YELLOW"       Option\n=======================\n"CYAN"[1] Scan another card \n[X] Return to main menu\n=======================\n"RESET,
+        *inputResult = ValidateResult(YELLOW"       Option\n=======================\n"CYAN"[1] Scan another card \n[X] Return to main menu\n=======================\n>"RESET,
                                               buff, sizeof(buff), numValueOfInput, 1, 1);
 
         if(*inputResult == INPUT_EXIT){

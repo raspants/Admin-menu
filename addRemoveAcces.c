@@ -56,7 +56,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
 
         printf(YELLOW"\n\nNew cardprofile generated:"CYAN" %d\n"GREEN"=================================\n"RESET, newCard); //not inserted in array yet
     
-        *inputResult = ValidateResult(YELLOW"\nEnter acces status\n"CYAN"[0] No acces\n[1] Acces\n[X] Return to main menu\n"RESET":", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
+        *inputResult = ValidateResult(YELLOW"\nEnter acces status\n"CYAN"[0] No acces\n[1] Acces\n[X] Return to main menu\n"RESET">", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
         if(*inputResult == INPUT_EXIT){
             cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards))); //shrink array if user exits befor compleating card creation
             if (!cardList->allCards) {
@@ -96,7 +96,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             clearCls();
             cardsInSystem(cardList, inputBuffer, inputBufferSize, numValueOfInput, inputResult);
 
-            *inputResult = ValidateResult(YELLOW"Enter the UID of the cardprofile you want to Acces\n\n"CYAN"[X] Return to main menu\n :"RESET, inputBuffer, inputBufferSize, numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
+            *inputResult = ValidateResult(YELLOW"Enter the UID of the cardprofile you want to Acces\n\n"CYAN"[X] Return to main menu\n>"RESET, inputBuffer, inputBufferSize, numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }
@@ -119,7 +119,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             break;               
         } 
 
-        *inputResult = ValidateResult(YELLOW"Option\n"CYAN"[1] Adjust acces\n[2] Remove a profile\n[X] Return to main menu\n"RESET, inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
+        *inputResult = ValidateResult(YELLOW"Option\n"CYAN"[1] Adjust acces\n[2] Remove a profile\n[X] Return to main menu\n>"RESET, inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
         if(*inputResult == INPUT_EXIT){
             return INPUT_EXIT;
         }
@@ -127,7 +127,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         action = (int)*numValueOfInput;
         if(action == 1){
            
-            *inputResult = ValidateResult(YELLOW"\nShold the cardprofile have\n"CYAN"[0] No acces\n[1] Acces\n"RESET":", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
+            *inputResult = ValidateResult(YELLOW"\nShold the cardprofile have\n"CYAN"[0] No acces\n[1] Acces\n"RESET">", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }  
@@ -149,7 +149,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         }else if(action == 2){            
            
  
-            *inputResult = ValidateResult(YELLOW"Are you sure you want to REMOVE the cards profile\n"CYAN"[1]"RED" Yes\n"CYAN"[2] No\n"RESET":", inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
+            *inputResult = ValidateResult(YELLOW"Are you sure you want to REMOVE the cards profile\n"CYAN"[1]"RED" Yes\n"CYAN"[2] No\n"RESET">", inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }

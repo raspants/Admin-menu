@@ -82,7 +82,7 @@ void cardsInSystem(CARDLIST *cardList, char *inputBuffer, size_t inputBufferSize
         allCardDevideLines(&longestUid, (int)sizeof(curentStatus), (int)strlen(card ->date));
     }   
     
-    *inputResult = ValidateResult(CYAN"[X] Continue\n"RESET,  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
+    *inputResult = ValidateResult(CYAN"[X] Continue\n>"RESET,  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
     if(*inputResult == INPUT_EXIT)
         return;
                     
