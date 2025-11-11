@@ -1,7 +1,6 @@
 #ifndef CARDSTRUCTURE_H
 #define CARDSTRUCTURE_H
 
-
 typedef struct{
     int cardUid; 
     int status;

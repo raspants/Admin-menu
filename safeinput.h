@@ -1,9 +1,8 @@
-#include <ctype.h> 
-#include "cardStructure.h"
-
 #ifndef __SAFE_INPUT_H
 #define __SAFE_INPUT_H
 
+#include <ctype.h> 
+#include "cardStructure.h"
 
 typedef enum {
     INPUT_RESULT_OK,

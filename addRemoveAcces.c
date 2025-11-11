@@ -42,8 +42,6 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
                 }
             }   
         }
-        //sort cards befor injekting new card
-        insertionPoint = sortCardArray(cardList, amountOfCards, &newCard); //insertionPoint to keep track where to injekt date and acces 
 
         time_t timeFetch = time(NULL);
         struct tm tm = *localtime(&timeFetch);
@@ -65,6 +63,8 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             }
             return INPUT_EXIT;
         }
+        //sort cards befor injekting new card
+        insertionPoint = sortCardArray(cardList, amountOfCards, &newCard); //insertionPoint to keep track where to injekt date and acces
          
         acces = (int)*numValueOfInput;//parse from long to int, wold be extream edge case to get overflow 
         
