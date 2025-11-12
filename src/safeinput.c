@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "timeDelay.h"
 #include "safeinput.h"
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
@@ -51,7 +52,7 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 	if (fgets(buff, maxSize, stdin) == NULL || (strlen(buff) == 1 && buff[0] == '\n')) // treat as empty
 	{
 		printf(BOLD RED"ERROR_MESSAGE: NO_INPUT_DETECTED\n"RESET);
-		
+		timeDelay(5);
 		return INPUT_RESULT_NO_INPUT; 
 	}
 
@@ -66,6 +67,7 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 
 		if (extra == 1) {
         	printf(BOLD RED"ERROR_MESSAGE: INVALID_INPUT_LEGNT, allowed length :%d characters.\n"RESET, maxSize - 2);
+			timeDelay(5);
         	return INPUT_RESULT_TOO_LONG;
 		}
 	}
@@ -79,6 +81,7 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 	if(!parseLong(buff, numValueOfInput)) // if input not a number
 	{
 		printf(BOLD RED"ERROR_MESSAGE: INVALID_INPUT_TYPE\n"RESET);
+		timeDelay(5);
 		return INPUT_RESULT_INVALID;
 	}
     
@@ -87,6 +90,7 @@ INPUT_RESULT GetInput(char* prompt, char* buff, int maxSize, long* numValueOfInp
 	if((int)*numValueOfInput > rangeValueMax || (int)*numValueOfInput < rangeValueMin){
 		//printf("DEBUG: parsed value = %ld\n", *numValueOfInput);
 		printf(BOLD RED"ERROR_MESSAGE: INPUT_OUT_OF_RANGE\n"RESET);
+		timeDelay(5);
 		return INPUT_RESULT_INVALID;
 	}
 

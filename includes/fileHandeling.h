@@ -3,7 +3,7 @@
 
 #include "cardStructure.h"
 
-void readFromFile(const char *filename, CARDLIST *cardList, int *amountOfCards);
+void readFromFile( char *filename, CARDLIST *cardList, int *amountOfCards);
 void reWrihtToFile(const char *filename, CARDLIST *cardList, int *amountOfCards);
 
 #endif

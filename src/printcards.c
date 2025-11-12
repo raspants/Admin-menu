@@ -84,6 +84,5 @@ void cardsInSystem(CARDLIST *cardList, char *inputBuffer, size_t inputBufferSize
     
     *inputResult = ValidateResult(CYAN"[X] Continue\n>"RESET,  inputBuffer, inputBufferSize, numValueOfInput, 1, 1);
     if(*inputResult == INPUT_EXIT)
-        return;
-                    
+        return;           
 }

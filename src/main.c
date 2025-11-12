@@ -16,13 +16,14 @@
 #include "clearCls.h"
 #include "colorpallet.h"
 #define INPUT_BUFF_SIZE 64
+#define CARD_DATA "data/data.txt";
 
 
 int main(){
     CARDLIST cardList;
     cardList.allCards = NULL;
     cardList.amountOfCards = 0;
-    const char filename[] = "data.txt";
+     char filename[] = CARD_DATA;
     char inputBuffer[INPUT_BUFF_SIZE]; // store user input
     long numValueOfInput;
     INPUT_RESULT inputResult; //stores the return from GETINPUT
@@ -35,8 +36,10 @@ int main(){
         int option;
         int subOption;
 
-        inputResult = ValidateResult(YELLOW"       Select option\n\n>"CYAN">"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 5);
-    
+        inputResult = ValidateResult(YELLOW"       Select option\n\n"CYAN""RESET">", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 5);
+        if(inputResult != INPUT_RESULT_OK){
+            continue;
+        }
         option = (int)numValueOfInput;
         switch(option){
         case 1:
