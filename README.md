@@ -19,10 +19,11 @@ The application allows administrators to add, remove, adjust, and list access ca
 
 ## Screenshots
 
-<p align="center">
-  <img src="screenshots/image1.png" alt="Main Menu" width="48%"/>
-  <img src="screenshots/image.png" alt="Card List" width="48%"/>
-</p>
+<div style="display: flex; justify-content: center; gap: 2%;">
+  <img src="screenshots/image1.png" alt="Main Menu" style="width: 48%; height: 300px; object-fit: cover;" />
+  <img src="screenshots/image.png" alt="Card List" style="width: 48%; height: 300px; object-fit: cover;" />
+</div>
+
 
 ## Project Structure
 ```bash
@@ -182,13 +183,15 @@ https://www.msys2.org/
 
   return i + 1;
 }
+```
+
 Highlights
 
 - Keeps the system the comsistant and esures UID uniquenes.
 - Avoids unnecesary memmory use from using ex. buffer array.
 - Avoids the nead to re-srot the entire array after each insertion
 - Efficiently insert new card while keeping the array sorted.
-```
+
 
 ## Summary
 
