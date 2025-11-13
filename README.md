@@ -84,6 +84,25 @@ Memory Management
 
 Dynamically allocated memory for the card list is freed before exiting.
 
+## Data structures
+
+#### Card
+```bash
+  typedef struct {
+    int cardUid;
+    int status;      // 0 = no access, 1 = access
+    char date[20];   // "YYYY-MM-DD HH:MM"
+} Card;
+
+```
+#### CARDLIST
+```bash
+  typedef struct {
+    int amountOfCards;
+    Card *allCards;   // dynamically allocated array of Card
+} CARDLIST;
+
+```
 
 ## Compilation & Execution
 - Requirements
@@ -115,8 +134,78 @@ https://www.msys2.org/
   ./access_admin
 ```
 
+
+## Memory Safety and Error Handeling
+- Dynamic memory is allocated with mallock() and realloc.
+- Memory is freed when cards are removed and when no cards remain.
+- User input is strictly validated to prevent buffer owerflow.
+- File operations check for faliures and handel errors.
+- Numeric inputs are checked for range, type and owerflow.
+- All finctions return clear INPUT_RESULT values for robust error handeling.
+
+## Summary
+
+This project demonstrates mamory management, input validation and file persistance for an access contorl system.
+
+- Modular design for easy maintenance and testing.
+- Suports dynamic scaling of data.
+- Emphasizes Safety operations and user-frendly interactions.
+
+### Code examples
+
+##### Dynamic UID Generation and Sorting
+```bash
+  cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards +1)));
+  if (!cardList->allCards) {
+      perror("realloc failed");
+      exit(EXIT_FAILURE);
+  }
+  int newCard = 110001; //startingpoint for card Uid
+  int acces;
+  int insertionPoint = *amountOfCards;
+
+  if(*amountOfCards == 0){ 
+      insertionPoint = 0;
+      cardList ->allCards[insertionPoint].cardUid = newCard; // assign if no cards i system
+  }else{    
+
+      for(int i = 0; i < *amountOfCards; i++){ 
+          if(cardList ->allCards[i].cardUid <= newCard){ //check all card Uid and increas new Uid untill uniqe
+              newCard++;
+          }else{ // when confirmed new Uid is uniq   
+              break;
+          }
+      }   
+  }
+```
+```bash
+  int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){
+  int i = *amountOfCards - 1;
+
+  while(i >= 0 && cardList->allCards[i].cardUid > *newCard){
+      cardList->allCards[i + 1] = cardList->allCards[i];
+      i--;
+  }
+
+  return i + 1;
+}
+Highlights
+
+- Keeps the system the comsistant and esures UID uniquenes.
+- Avoids unnecesary memmory use from using ex. buffer array.
+- Avoids the nead to re-srot the entire array after each insertion
+- Efficiently insert new card while keeping the array sorted.
+```
+
+Potential improvements
+
+- Add concurrency suport for scaning multiple cards in real-time.
+- Proper hardware integation.
+- Card Uid incryption.
+
 ## Author
 
  GitHub Profile
  raspants
+
 

@@ -8,8 +8,6 @@ void readFromFile( char *filename, CARDLIST *cardList, int *amountOfCards){
     FILE *fp = fopen(filename, "r");
     if(fp == NULL){
         printf("Error: Failed to open file %s\n", filename);
-
-        //fp = fopen(filename, "w");
         timeDelay(5);
         *amountOfCards = 0;
         return;
@@ -53,7 +51,6 @@ void reWrihtToFile(const char *filename, CARDLIST *cardList, int *amountOfCards)
     
     for(int i = 0; i < *amountOfCards; i++){
         if(fprintf(fp, "%d %d %s\n", cardList ->allCards[i].cardUid, cardList ->allCards[i].status, cardList ->allCards[i].date) <0){
-            
             perror("ERROR: Filed to wriht data for card\n");
             timeDelay(5);
             fclose(fp);
