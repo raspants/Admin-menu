@@ -20,8 +20,8 @@ The application allows administrators to add, remove, adjust, and list access ca
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/image.png" alt="Main Menu" width="48%"/>
-  <img src="screenshots/image1.png" alt="Card List" width="48%"/>
+  <img src="screenshots/image1.png" alt="Main Menu" width="48%"/>
+  <img src="screenshots/image.png" alt="Card List" width="48%"/>
 </p>
 
 ## Project Structure
