@@ -143,13 +143,6 @@ https://www.msys2.org/
 - Numeric inputs are checked for range, type and owerflow.
 - All finctions return clear INPUT_RESULT values for robust error handeling.
 
-## Summary
-
-This project demonstrates mamory management, input validation and file persistance for an access contorl system.
-
-- Modular design for easy maintenance and testing.
-- Suports dynamic scaling of data.
-- Emphasizes Safety operations and user-frendly interactions.
 
 ### Code examples
 
@@ -196,6 +189,14 @@ Highlights
 - Avoids the nead to re-srot the entire array after each insertion
 - Efficiently insert new card while keeping the array sorted.
 ```
+
+## Summary
+
+This project demonstrates mamory management, input validation and file persistance for an access contorl system.
+
+- Modular design for easy maintenance and testing.
+- Suports dynamic scaling of data.
+- Emphasizes Safety operations and user-frendly interactions.
 
 Potential improvements
 
