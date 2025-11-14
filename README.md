@@ -187,23 +187,23 @@ https://www.msys2.org/
 
 Highlights
 
-- Keeps the system the comsistant and esures UID uniquenes.
-- Avoids unnecesary memmory use from using ex. buffer array.
-- Avoids the nead to re-srot the entire array after each insertion
+- Keeps the system the consistent and enures UID uniqueness.
+- Avoids unnecessary memory use from using ex. buffer array.
+- Avoids the need to re-sort the entire array after each insertion
 - Efficiently insert new card while keeping the array sorted.
 
 
 ## Summary
 
-This project demonstrates mamory management, input validation and file persistance for an access contorl system.
+This project demonstrates memory management, input validation and file persistence for an access control system.
 
 - Modular design for easy maintenance and testing.
-- Suports dynamic scaling of data.
+- Supports dynamic scaling of data.
 - Emphasizes Safety operations and user-frendly interactions.
 
 Potential improvements
 
-- Add concurrency suport for scaning multiple cards in real-time.
+- Add concurrency support for scaning multiple cards in real-time.
 - Proper hardware integation.
 - Card Uid incryption.
 
@@ -211,5 +211,3 @@ Potential improvements
 
  GitHub Profile
  raspants
-
-
