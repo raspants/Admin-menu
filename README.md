@@ -57,34 +57,6 @@ The application allows administrators to add, remove, adjust, and list access ca
 └── README.md
 ```
 
-## Program Workflow
-
-main.c (in src/) is the program entry point. Workflow:
-
-Initialize system
-
-Loads card data from data/data.txt into memory.
-
-Main Menu Options
-
-1 — Remote Open: Open a door remotely with admin credentials.
-
-2 — List Cards: Display all cards in the system.
-
-3 — Manage Cards: Add, adjust, or remove card profiles. Users can repeatedly add or modify cards until they return to the main menu.
-
-4 — Scan Card: Simulate scanning a card to verify access.
-
-5 — Exit: Frees memory and exits.
-
-Input Validation
-
-All inputs are validated with ValidateResult() to ensure safe operations.
-
-Memory Management
-
-Dynamically allocated memory for the card list is freed before exiting.
-
 ## Data structures
 
 #### Card
@@ -110,30 +82,13 @@ Dynamically allocated memory for the card list is freed before exiting.
 
 - GCC (GNU Compiler Collection)
 
-- Make (optional)
+- Run with Makefile (optional)
 
 - Compatible with Linux / macOS / Windows (MinGW) terminal
 
 GCC compiler for windows:
 https://www.msys2.org/
 
-
-#### Compile manually:
-
-```bash
-  gcc -o access_admin main.c -Wall
-```
-#### If your project uses multiple .c source files, compile them together:
-
-```bash
-  gcc -o access_admin main.c fileHandeling.c addRemoveAcces.c printcards.c timeDelay.c remoteopen.c safeinput.c cardScan.c clearCls.c -Wall
-```
-
-#### Then run:
-
-```bash
-  ./access_admin
-```
 
 
 ## Memory Safety and Error Handeling
