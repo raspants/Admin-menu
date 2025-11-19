@@ -13,6 +13,7 @@ The application allows administrators to add, remove, adjust, and list access ca
 - Safe input handling and buffer validation
 - File read/write support through modular headers
 - Time-delayed CLI feedback
+- User-friendly interface
 - Color-coded terminal interface
 - Dynamic display of cardlist
 
@@ -155,6 +156,7 @@ This project demonstrates memory management, input validation and file persisten
 - Modular design for easy maintenance and testing.
 - Supports dynamic scaling of data.
 - Emphasizes Safety operations and user-frendly interactions.
+- Safe handling of mid-process cancellation.
 
 Potential improvements
 
