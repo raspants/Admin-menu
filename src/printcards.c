@@ -7,7 +7,7 @@
 #include "colorpallet.h"
 
 void dynamicHeaderLinePrint(int *lineLegnth, const char *character){
-    for(int i = 0; i < *lineLegnth; i++){  
+    for(int i = 0; i < *lineLegnth + 3; i++){  
         printf(GREEN"%c"RESET, *character);
     }
      printf("\n");
@@ -59,7 +59,7 @@ void cardsInSystem(CARDLIST *cardList, char *inputBuffer, size_t inputBufferSize
     printf(" %*s\n",(longestUid + 38), YELLOW"All cards in system"RESET);
     dynamicHeaderLinePrint(&fullDisplaywidth, "=");
 
-    dynamicHeaderLinePrint(&fullDisplaywidth, "-");
+    dynamicHeaderLinePrint(&fullDisplaywidth , "-");
     if(cardList->amountOfCards == 0){
         printf(" %*s", (fullDisplaywidth / 2), YELLOW"No cards in System\n");
         dynamicHeaderLinePrint(&fullDisplaywidth, "-");
