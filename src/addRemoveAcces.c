@@ -54,7 +54,11 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
 
         printf(YELLOW"\n\nNew cardprofile generated:"CYAN" %d\n"GREEN"=================================\n"RESET, newCard); //not inserted in array yet
     
-        *inputResult = ValidateResult(YELLOW"\nEnter acces status\n"CYAN"[0] No acces\n[1] Acces\n[X] Return to main menu\n"RESET">", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
+        *inputResult = ValidateResult(YELLOW"\nEnter acces status\n"
+                                        CYAN"[0] No acces\n"
+                                        "[1] Acces\n"
+                                        "[X] Return to main menu\n"RESET
+                                        ">", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
         if(*inputResult == INPUT_EXIT){
             cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards))); //shrink array if user exits befor compleating card creation
             if (!cardList->allCards) {
@@ -75,7 +79,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         #pragma GCC diagnostic ignored "-Wformat-truncation"
 
         snprintf(cardList ->allCards[insertionPoint].date, sizeof(cardList->allCards[insertionPoint].date), "%04d-%02d-%02d %02d:%02d", //insert date at correct index
-                                                                                                        year, month, day, hour, minute);
+                                                                                                             year, month, day, hour, minute);
         #pragma GCC diagnostic pop
 
 
@@ -96,7 +100,9 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             clearCls();
             cardsInSystem(cardList, inputBuffer, inputBufferSize, numValueOfInput, inputResult);
 
-            *inputResult = ValidateResult(YELLOW"Enter the UID of the cardprofile you want to Acces\n\n"CYAN"[X] Return to main menu\n>"RESET, inputBuffer, inputBufferSize, numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
+            *inputResult = ValidateResult(YELLOW"Enter the UID of the cardprofile you want to Acces\n\n"
+                                            CYAN"[X] Return to main menu\n"
+                                                ">"RESET, inputBuffer, inputBufferSize, numValueOfInput, 110001, cardList ->allCards[cardList ->amountOfCards -1].cardUid);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }
@@ -119,7 +125,11 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             break;               
         } 
 
-        *inputResult = ValidateResult(YELLOW"Option\n"CYAN"[1] Adjust acces\n[2] Remove a profile\n[X] Return to main menu\n>"RESET, inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
+        *inputResult = ValidateResult(YELLOW"Option\n"
+                                        CYAN"[1] Adjust acces\n"
+                                            "[2] Remove a profile\n"
+                                            "[X] Return to main menu\n"
+                                            ">"RESET, inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
         if(*inputResult == INPUT_EXIT){
             return INPUT_EXIT;
         }
@@ -127,7 +137,10 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         action = (int)*numValueOfInput;
         if(action == 1){
            
-            *inputResult = ValidateResult(YELLOW"\nShold the cardprofile have\n"CYAN"[0] No acces\n[1] Acces\n"RESET">", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
+            *inputResult = ValidateResult(YELLOW"\nShold the cardprofile have\n"
+                                            CYAN"[0] No acces\n"
+                                                "[1] Acces\n"
+                                           RESET">", inputBuffer, inputBufferSize, numValueOfInput, 0, 1);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }  
@@ -141,7 +154,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             }else if(acces == 0){
                 cardList ->allCards[index].status = 0;
                 reWrihtToFile(filename, cardList, amountOfCards);
-                printf(CYAN"Acces has been updated uppdated and removed on the card\n"RESET);
+                printf(CYAN"Access has been updated and removed on the card\n"RESET);
                 timeDelay(1);
                 return 0;
             }
@@ -149,7 +162,9 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
         }else if(action == 2){            
            
  
-            *inputResult = ValidateResult(YELLOW"Are you sure you want to REMOVE the cards profile\n"CYAN"[1]"RED" Yes\n"CYAN"[2] No\n"RESET">", inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
+            *inputResult = ValidateResult(YELLOW"Are you sure you want to REMOVE the cards profile\n"
+                                            CYAN"[1]"RED" Yes\n"
+                                            CYAN"[2] No\n"RESET">", inputBuffer, inputBufferSize, numValueOfInput, 1, 2);
             if(*inputResult == INPUT_EXIT){
                 return INPUT_EXIT;
             }
@@ -180,7 +195,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
     }   
 }
 
-int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){ //sort cards in array by card Uid, used later for defining range of carUid input in serch
+int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){ //sort cards in array by card Uid, used later for defining range of carUid input in search
     
     int i = *amountOfCards -1;
 
