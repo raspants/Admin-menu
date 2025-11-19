@@ -28,7 +28,7 @@ int main(){
     long numValueOfInput;
     INPUT_RESULT inputResult; //stores the return from GETINPUT
 
-    readFromFile(filename,&cardList, &cardList.amountOfCards); //retreve data form file
+    readFromFile(filename,&cardList, &cardList.amountOfCards); //retrieve data form file
 
     while(true){
        
@@ -43,21 +43,26 @@ int main(){
         option = (int)numValueOfInput;
         switch(option){
         case 1:
-            remoteOpen(&admin); //calls remotedoor open with admin profile whome hase acces
+            remoteOpen(&admin); //calls remotedoor open with admin profile whom has access
             break;
         case 2:
             if(cardList.amountOfCards > 0 && cardList.allCards != NULL){ //check if there are cards in system
                 cardsInSystem(&cardList, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);   // list all cards for user
             }else{
                 printf(CYAN"There are curently no cards in the system\n"RESET);
-                timeDelay(2); //to second dealy to display message before clear in cli
+                timeDelay(2); //to second delay to display message before clear in cli
             }
             break;
 
         case 3:
                 clearCls();
-                inputResult = ValidateResult(YELLOW"Option\n"GREEN"=======================\n"CYAN"[1] Add new profil\n[2] Adjust/Remove profile\n[X] Return to main menu\n"GREEN"=======================\n"RESET">",  
-                                            inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 2);
+                inputResult = ValidateResult(YELLOW"Option\n"
+                                                GREEN"=======================\n"CYAN
+                                                "[1] Add new profil\n"
+                                                "[2] Adjust/Remove profile\n"
+                                                "[X] Return to main menu\n"
+                                                GREEN"=======================\n"RESET
+                                                ">",  inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 2);
 
                 if(inputResult == INPUT_EXIT){
                     break;
@@ -69,7 +74,10 @@ int main(){
                 do {
                     addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
                     
-                    inputResult = ValidateResult(YELLOW"Do you want to add another user\n"CYAN"[1] Yes\n[X] Return to main menu\n>"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
+                    inputResult = ValidateResult(YELLOW"Do you want to add another user\n"
+                                                   CYAN"[1] Yes\n[X] Return to main menu\n"
+                                                   ">"RESET, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
+                                                   
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
@@ -80,14 +88,18 @@ int main(){
             }else if(option == 2){ //adjust or remove card profile
                 do{
                     if(cardList.amountOfCards == 0){
-                        printf(CYAN"No cards curently in system\n"RESET);
+                        printf(CYAN"No cards currently in system\n"RESET);
                         timeDelay(2);
                         break;
                     }
 
                     addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE,  &numValueOfInput, &inputResult);
                     
-                    inputResult = ValidateResult(YELLOW"Do you want to acces another card profile\n"CYAN"[1] Yes\n[X] Return to main menu\n"RESET">", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
+                    inputResult = ValidateResult(YELLOW"Do you want to access another card profile\n"
+                                                    CYAN"[1] Yes\n"
+                                                        "[X] Return to main menu\n"RESET
+                                                        ">", inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, 1, 1);
+
                     if(inputResult == INPUT_EXIT){
                         break;
                     }
