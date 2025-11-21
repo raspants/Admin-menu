@@ -192,29 +192,30 @@ Example: Full Load + Decrypt Cycle
       perror("realloc failed");
       exit(EXIT_FAILURE);
   }
-  int newCard = 110001; //startingpoint for card Uid
-  int acces;
+  int newCard = 110001; 
   int insertionPoint = *amountOfCards;
 
   if(*amountOfCards == 0){ 
       insertionPoint = 0;
-      cardList ->allCards[insertionPoint].cardUid = newCard; // assign if no cards i system
+      cardList ->allCards[insertionPoint].cardUid = newCard;
   }else{    
 
       for(int i = 0; i < *amountOfCards; i++){ 
-          if(cardList ->allCards[i].cardUid <= newCard){ //check all card Uid and increas new Uid untill uniqe
+          if(cardList ->allCards[i].cardUid <= newCard){ 
               newCard++;
           }else{ // when confirmed new Uid is uniq   
               break;
           }
       }   
   }
+
 ```
 ```bash
-  int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){
-  int i = *amountOfCards - 1;
+int sortCardArray(CARDLIST *cardList, int *newCard){ 
+    
+  int i = cardList->amountOfCards -1;
 
-  while(i >= 0 && cardList->allCards[i].cardUid > *newCard){
+  while( i >= 0 && cardList->allCards[i].cardUid > *newCard){
       cardList->allCards[i + 1] = cardList->allCards[i];
       i--;
   }
