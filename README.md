@@ -8,8 +8,8 @@ The application allows administrators to add, remove, adjust, and list access ca
 
 - Add, remove, and modify card profiles
 - Persistent encrypted data storage using Libsodium
-- Data inport feture with duplicate check
-- Simulated cardscaning through terminal
+- Data import feature with duplicate check
+- Simulated card-scanning through terminal
 - Safe input handling and buffer validation
 - File read/write support through modular headers
 - Time-delayed CLI feedback
@@ -88,9 +88,11 @@ The application allows administrators to add, remove, adjust, and list access ca
 
 - Libsodium library
 
-- Run with Makefile (optional)
+- Run with Makefile 
 
 - Compatible with Linux / macOS / Windows (MinGW) terminal
+
+- For import, add/update import.txt file in data folder 
 
 GCC compiler for windows:
 https://www.msys2.org/

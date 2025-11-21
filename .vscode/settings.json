@@ -37,5 +37,8 @@
         "sodium.h": "c",
         "encryption.h": "c",
         "cardscan.h": "c"
-    }
+    },
+    "cSpell.words": [
+        "Libsodium"
+    ]
 }
