@@ -12,16 +12,13 @@ int encryptFile(const char *plainText, size_t len, const char *filename, const c
 
     CryptoContext ctx;
 
-    // 1. Generate salt
-    randombytes_buf(ctx.salt, sizeof ctx.salt);
+    randombytes_buf(ctx.salt, sizeof ctx.salt); // Generate salt
 
-    // 2. Derive key from password + salt
-    if (deriveKey(ctx.key, password, ctx.salt) != 0) {
+    if (deriveKey(ctx.key, password, ctx.salt) != 0) {  //Derive key from password + salt
         return -1;
     }
-
-    // 3. Generate a random nonce
-    randombytes_buf(ctx.nonce, sizeof ctx.nonce);
+ 
+    randombytes_buf(ctx.nonce, sizeof ctx.nonce); //Generate  random nonce
 
 
     size_t cipher_size = len + crypto_secretbox_MACBYTES;
@@ -31,16 +28,14 @@ int encryptFile(const char *plainText, size_t len, const char *filename, const c
         return -1;
     }
 
-    // 5. Encrypt
-    if (crypto_secretbox_easy(ciphertext, (const unsigned char *)plainText, len,
+    if (crypto_secretbox_easy(ciphertext, (const unsigned char *)plainText, len, //encrypt
                               ctx.nonce, ctx.key) != 0)
     {
         free(ciphertext);
         return -1; // Should not occur unless libsodium fails
     }
 
-    // 6. Write salt + nonce + ciphertext to file
-    FILE *fp = fopen(filename, "wb");
+    FILE *fp = fopen(filename, "wb"); //Write salt + nonce + ciphertext to file
     if (!fp) {
         free(ciphertext);
         return -1;
@@ -51,13 +46,11 @@ int encryptFile(const char *plainText, size_t len, const char *filename, const c
     fwrite(ciphertext, 1, cipher_size, fp);
     fclose(fp);
 
-    // 7. Cleanup sensitive data
-    sodium_memzero(ctx.key, sizeof ctx.key);
+    sodium_memzero(ctx.key, sizeof ctx.key); //Cleanup sensitive data
     free(ciphertext);
 
     return 0; // Success
 }
-
 
 int decryptFile( char **plainText, size_t *len, const char *filename, const char *password){
 
@@ -93,8 +86,7 @@ int decryptFile( char **plainText, size_t *len, const char *filename, const char
         return -1; // Corrupt file
     }
 
-    // 4. Allocate ciphertext buffer
-    unsigned char *ciphertext = malloc(cipher_size);
+    unsigned char *ciphertext = malloc(cipher_size); //Allocate ciphertext buffer
     if (!ciphertext) {
         fclose(fp);
         return -1;
@@ -103,15 +95,14 @@ int decryptFile( char **plainText, size_t *len, const char *filename, const char
     fread(ciphertext, 1, cipher_size, fp);
     fclose(fp);
 
-    // 5. Allocate plaintext buffer for output
-    *plainText = malloc(cipher_size - crypto_secretbox_MACBYTES);
+    *plainText = malloc(cipher_size - crypto_secretbox_MACBYTES); //Allocate plaintext buffer for output
     if (!*plainText) {
         free(ciphertext);
         return -1;
     }
 
-    // 6. Decrypt
-    if (crypto_secretbox_open_easy((unsigned char *)*plainText, ciphertext, cipher_size, ctx.nonce, ctx.key) != 0){
+    // 6. 
+    if (crypto_secretbox_open_easy((unsigned char *)*plainText, ciphertext, cipher_size, ctx.nonce, ctx.key) != 0){ //Decrypt
         
         // Wrong password or corrupted file
         free(ciphertext);

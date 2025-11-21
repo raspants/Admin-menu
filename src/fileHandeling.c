@@ -118,7 +118,7 @@ void importFromFile(const char *importFilename, const char *filename, CARDLIST *
 
         Card temp;
 
-        if(sscanf(line, " %d %d %17[0-9- :]", &temp.cardUid, &temp.status, temp.date) != 3){
+        if(sscanf(line, " %d %d %17[0-9- :]", &temp.cardUid, &temp.status, temp.date) != 3){ //scan in line from import doc to temp profile
             continue; // if invalid data
         } 
 
@@ -138,13 +138,14 @@ void importFromFile(const char *importFilename, const char *filename, CARDLIST *
                 timeDelay(3);
                 return;
             }
-            int insertionPoint = sortCardArray(cardList, &temp.cardUid);
+            int insertionPoint = sortCardArray(cardList, &temp.cardUid); //sorts the array befor injecting a new profile
             cardList->allCards[insertionPoint] = temp;
             cardList->amountOfCards++;
             amountUnique++;
 
         }                                                 
     }
+    
 
     saveEncryptedCardList(filename, cardList, password);
     printf("Data importation successful\n%d new caraprofiles added to system\n%d caraprofiles already in system and were not imported", amountUnique, alreadyStored);

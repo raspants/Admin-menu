@@ -90,7 +90,8 @@ The application allows administrators to add, remove, adjust, and list access ca
 GCC compiler for windows:
 https://www.msys2.org/
 
-
+FIxa sen
+https://github.com/jedisct1/libsodium/releases?utm_source=chatgpt.com
 
 ## Memory Safety and Error Handeling
 - Dynamic memory is allocated with mallock() and realloc.
