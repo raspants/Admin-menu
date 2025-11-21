@@ -101,7 +101,6 @@ int decryptFile( char **plainText, size_t *len, const char *filename, const char
         return -1;
     }
 
-    // 6. 
     if (crypto_secretbox_open_easy((unsigned char *)*plainText, ciphertext, cipher_size, ctx.nonce, ctx.key) != 0){ //Decrypt
         
         // Wrong password or corrupted file
