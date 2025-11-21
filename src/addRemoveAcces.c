@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "encryption.h"
 #include "clearCls.h"
 #include "addRemoveAcces.h"
 #include "safeinput.h"
@@ -11,9 +12,10 @@
 #include "timeDelay.h"
 #include "colorpallet.h"
 
-int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard);
 
-int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *amountOfCards, char *inputBuffer, size_t inputBufferSize, long *numValueOfInput, INPUT_RESULT *inputResult){
+int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, 
+                    int *amountOfCards, char *inputBuffer, size_t inputBufferSize, 
+                    long *numValueOfInput, INPUT_RESULT *inputResult, const char* password){
     
     //hade kunnat göras i separata funktioner för add, remove och adjust
 
@@ -25,7 +27,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             perror("realloc failed");
             exit(EXIT_FAILURE);
         }
-        int newCard = 110001; //startingpoint for card Uid
+        int newCard = 110001; //startingpoint for card Uid, can be lower but looks nicer when longer
         int acces;
         int insertionPoint = *amountOfCards;
 
@@ -68,7 +70,7 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             return INPUT_EXIT;
         }
         //sort cards befor injekting new card
-        insertionPoint = sortCardArray(cardList, amountOfCards, &newCard); //insertionPoint to keep track where to injekt date and acces
+        insertionPoint = sortCardArray(cardList, &newCard); //insertionPoint to keep track where to injekt date and acces
          
         acces = (int)*numValueOfInput;//parse from long to int, wold be extream edge case to get overflow 
         
@@ -82,10 +84,11 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
                                                                                                              year, month, day, hour, minute);
         #pragma GCC diagnostic pop
 
-
         *amountOfCards += 1; //only increment after inserion of date and acces
        
-        reWrihtToFile(filename, cardList, amountOfCards); //read new card regestery to file
+        saveEncryptedCardList(filename, cardList, password); 
+        
+        
         return 0;
         
     //for altering acces/removing profile    
@@ -147,13 +150,17 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
             acces = (int)*numValueOfInput;
             if(acces == 1){
                 cardList ->allCards[index].status = 1;
-                reWrihtToFile(filename, cardList, amountOfCards);
+
+                saveEncryptedCardList(filename, cardList, password);
+
                 printf(CYAN"Acces has been updated and added on the card\n"RESET);
                 timeDelay(1);
                 return 0;
             }else if(acces == 0){
                 cardList ->allCards[index].status = 0;
-                reWrihtToFile(filename, cardList, amountOfCards);
+
+                saveEncryptedCardList(filename, cardList, password);
+
                 printf(CYAN"Access has been updated and removed on the card\n"RESET);
                 timeDelay(1);
                 return 0;
@@ -179,12 +186,16 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
 
                 if(*amountOfCards > 0){
                     cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards)));
-                    reWrihtToFile(filename, cardList, amountOfCards);
+
+                    saveEncryptedCardList(filename, cardList, password);
+
                     return 0;
                 }else{
                     free(cardList ->allCards);
                     cardList -> allCards = NULL;
-                    reWrihtToFile(filename, cardList, amountOfCards);
+
+                    saveEncryptedCardList(filename, cardList, password);
+
                     return 0;
                 }
             }   
@@ -195,9 +206,9 @@ int addRemoveAccess(const char *filename, CARDLIST *cardList, int *option, int *
     }   
 }
 
-int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){ //sort cards in array by card Uid, used later for defining range of carUid input in search
+int sortCardArray(CARDLIST *cardList, int *newCard){ //sort cards in array by card Uid, used later for defining range of carUid input in search
     
-    int i = *amountOfCards -1;
+    int i = cardList->amountOfCards -1;
 
     while( i >= 0 && cardList->allCards[i].cardUid > *newCard){
         cardList->allCards[i + 1] = cardList->allCards[i];

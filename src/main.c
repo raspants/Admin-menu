@@ -15,20 +15,79 @@
 #include "safeinput.h"
 #include "clearCls.h"
 #include "colorpallet.h"
+#include "encryption.h"
 #define INPUT_BUFF_SIZE 64
-#define CARD_DATA "data/data.txt";
+#define CARD_DATA "data/data.enc"
+#define IMPORT_DATA "data/import.txt"
 
 
 int main(){
     CARDLIST cardList;
     cardList.allCards = NULL;
     cardList.amountOfCards = 0;
-     char filename[] = CARD_DATA;
+    char filename[] = CARD_DATA;
     char inputBuffer[INPUT_BUFF_SIZE]; // store user input
     long numValueOfInput;
     INPUT_RESULT inputResult; //stores the return from GETINPUT
+    char *fileBuffer = NULL;
+    size_t buffLength = 0;
+    char confirmation[64];
+    char password[64];
+    bool authantiaction = false;
+    
+    clearCls();
 
-    readFromFile(filename,&cardList, &cardList.amountOfCards); //retrieve data form file
+    FILE *fp = fopen(CARD_DATA, "rb");
+    if(!fp){
+        while(true){
+            printf("No data found.\nPlease choose a password: ");
+            if(fgets(password, sizeof(password), stdin) == NULL){
+                continue;
+            }
+            password[strcspn(password, "\n")] = 0;
+
+            printf("Confirm password: ");
+            if(fgets(confirmation, sizeof(confirmation), stdin) == NULL){
+                continue;
+            }
+            confirmation[strcspn(confirmation, "\n")] = 0;
+
+            if(strcmp(password, confirmation) == 0){
+                printf("Password was set\n");
+                timeDelay(2);
+                saveEncryptedCardList(filename, &cardList, password);
+                printf("Encrypted data file has been created\n");
+                timeDelay(2);
+                break;
+            }else{
+                printf("Passwords do not match, try again.");
+                timeDelay(3);
+            }
+        }
+
+    }else{
+        fclose(fp);
+    }
+
+    while(!authantiaction){
+        printf("Enter password: ");
+        if(fgets(password, sizeof(password), stdin) == NULL){
+            continue;
+        }
+        password[strcspn(password, "\n")] =0;
+
+        if(decryptFile(&fileBuffer, &buffLength, filename, password) == 0){
+            readFromFileBuffer(fileBuffer, buffLength, &cardList);
+            free(fileBuffer);
+            authantiaction = true;
+        }else{
+            printf("Incorrect password, try again");
+            timeDelay(1);
+            clearCls();
+        }
+    }
+   
+
 
     while(true){
        
@@ -72,7 +131,7 @@ int main(){
 
             if(option == 1){ 
                 do {
-                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
+                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE, &numValueOfInput, &inputResult, password);
                     
                     inputResult = ValidateResult(YELLOW"Do you want to add another user\n"
                                                    CYAN"[1] Yes\n[X] Return to main menu\n"
@@ -93,7 +152,7 @@ int main(){
                         break;
                     }
 
-                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE,  &numValueOfInput, &inputResult);
+                    addRemoveAccess(filename,&cardList, &option, &cardList.amountOfCards, inputBuffer, INPUT_BUFF_SIZE,  &numValueOfInput, &inputResult, password);
                     
                     inputResult = ValidateResult(YELLOW"Do you want to access another card profile\n"
                                                     CYAN"[1] Yes\n"
@@ -111,8 +170,11 @@ int main(){
         case 4:
             cardScan(&cardList, inputBuffer,INPUT_BUFF_SIZE, &numValueOfInput, &inputResult);
             break; 
-
         case 5:
+            importFromFile(IMPORT_DATA, CARD_DATA, &cardList, password);
+            break;
+
+        case 6:
             free(cardList.allCards);
             return 0;
 

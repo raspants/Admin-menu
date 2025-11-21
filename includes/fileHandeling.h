@@ -3,8 +3,9 @@
 
 #include "cardStructure.h"
 
-void readFromFile( char *filename, CARDLIST *cardList, int *amountOfCards);
-void reWrihtToFile(const char *filename, CARDLIST *cardList, int *amountOfCards);
+void readFromFileBuffer(const char *buffer, size_t buffLength,  CARDLIST *cardList);
+char* wrightToFileBuffer(CARDLIST *cardList, size_t *outLength);
+void importFromFile(const char *importFilename, const char *filename, CARDLIST *cardList, const char *password);
 
 #endif
 

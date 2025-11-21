@@ -18,6 +18,7 @@ void printMenue(){
     printf(" [2] List all cards in system\n");
     printf(" [3] Add/remove access\n");
     printf(" [4] SCAN CARD\n");
-    printf(" [5] Exit\n");
+    printf(" [5] Import data to encrypted file\n");
+    printf(" [6] Exit\n");
     printf(GREEN"==============================\n\n\n"RESET);
 }

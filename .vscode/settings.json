@@ -33,6 +33,9 @@
         "random": "c",
         "ctype.h": "c",
         "colorpallet.h": "c",
-        "timedelay.h": "c"
+        "timedelay.h": "c",
+        "sodium.h": "c",
+        "encryption.h": "c",
+        "cardscan.h": "c"
     }
 }
