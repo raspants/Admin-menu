@@ -109,8 +109,7 @@ A 32-byte symmetric key is generated from the user password and salt using crypt
 The system uses the symmetric key derived from a password to ensuring that only users who know the password can decrypt and access stored card profiles.
 
 
-
-#### The data.enc file layout is
+#### data.enc file layout 
 
 32 byte salt - 24 byte Nonce - Encrypted payload
 
@@ -174,13 +173,13 @@ Example: Full Load + Decrypt Cycle
 
 ```
 
-## Memory Safety and Error Handeling
+## Memory Safety and Error Handling
 - Dynamic memory is allocated with mallock() and realloc.
 - Memory is freed when cards are removed and when no cards remain.
-- User input is strictly validated to prevent buffer owerflow.
-- File operations check for faliures and handel errors.
-- Numeric inputs are checked for range, type and owerflow.
-- All finctions return clear INPUT_RESULT values for robust error handeling.
+- User input is strictly validated to prevent buffer overflow.
+- File operations check for failures and handel errors.
+- Numeric inputs are checked for range, type and overflow.
+- All function return clear INPUT_RESULT values for robust error handling.
 
 
 ### Code examples
@@ -234,95 +233,19 @@ Highlights
 
 ## Summary
 
-This project demonstrates memory management, input validation and file persistence for an access control system.
+This project demonstrates memory management, input validation, data encryption and file persistence for an access control system.
 
 - Modular design for easy maintenance and testing.
 - Supports dynamic scaling of data.
-- Emphasizes Safety operations and user-frendly interactions.
+- Emphasizes Safety operations and user-friendly interactions.
 - Safe handling of mid-process cancellation.
+- Secure data encryption
+- Easy and safe data importation
 
 Potential improvements
 
-- Add concurrency support for scaning multiple cards in real-time.
-- Proper hardware integation.
-- Card Uid incryption.
-
-## Author
-
- GitHub Profile
- raspants
-
-## Memory Safety and Error Handeling
-- Dynamic memory is allocated with mallock() and realloc.
-- Memory is freed when cards are removed and when no cards remain.
-- User input is strictly validated to prevent buffer owerflow.
-- File operations check for faliures and handel errors.
-- Numeric inputs are checked for range, type and owerflow.
-- All finctions return clear INPUT_RESULT values for robust error handeling.
-
-
-### Code examples
-
-##### Dynamic UID Generation and Sorting
-```bash
-  cardList->allCards = realloc(cardList->allCards, (sizeof(Card) * (*amountOfCards +1)));
-  if (!cardList->allCards) {
-      perror("realloc failed");
-      exit(EXIT_FAILURE);
-  }
-  int newCard = 110001; //startingpoint for card Uid
-  int acces;
-  int insertionPoint = *amountOfCards;
-
-  if(*amountOfCards == 0){ 
-      insertionPoint = 0;
-      cardList ->allCards[insertionPoint].cardUid = newCard; // assign if no cards i system
-  }else{    
-
-      for(int i = 0; i < *amountOfCards; i++){ 
-          if(cardList ->allCards[i].cardUid <= newCard){ //check all card Uid and increas new Uid untill uniqe
-              newCard++;
-          }else{ // when confirmed new Uid is uniq   
-              break;
-          }
-      }   
-  }
-```
-```bash
-  int sortCardArray(CARDLIST *cardList, int *amountOfCards, int *newCard){
-  int i = *amountOfCards - 1;
-
-  while(i >= 0 && cardList->allCards[i].cardUid > *newCard){
-      cardList->allCards[i + 1] = cardList->allCards[i];
-      i--;
-  }
-
-  return i + 1;
-}
-```
-
-Highlights
-
-- Keeps the system the consistent and enures UID uniqueness.
-- Avoids unnecessary memory use from using ex. buffer array.
-- Avoids the need to re-sort the entire array after each insertion
-- Efficiently insert new card while keeping the array sorted.
-
-
-## Summary
-
-This project demonstrates memory management, input validation and file persistence for an access control system.
-
-- Modular design for easy maintenance and testing.
-- Supports dynamic scaling of data.
-- Emphasizes Safety operations and user-frendly interactions.
-- Safe handling of mid-process cancellation.
-
-Potential improvements
-
-- Add concurrency support for scaning multiple cards in real-time.
-- Proper hardware integation.
-- Card Uid incryption.
+- Add concurrency support for scanning multiple cards in real-time.
+- Proper hardware integration.
 
 ## Author
 
