@@ -99,6 +99,7 @@ https://www.msys2.org/
 
 Libsodium library:
 https://github.com/jedisct1/libsodium/releases?utm_source=chatgpt.com
+Provided by jedisct1
 
 
 ## Data Encryption using Libsodium (Password-Protected Storage)
