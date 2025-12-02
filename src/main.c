@@ -22,6 +22,7 @@
 
 
 int main(){
+
     CARDLIST cardList;
     cardList.allCards = NULL;
     cardList.amountOfCards = 0;
@@ -88,10 +89,10 @@ int main(){
     }
    
 
-
     while(true){
        
         printMenue();
+        
         int option;
         int subOption;
 
